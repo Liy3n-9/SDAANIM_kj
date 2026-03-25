@@ -28,16 +28,16 @@
         <a href="{{ route('volunteer.tasks') }}">Mis Tareas</a>
     </div>
     <div class="admin-card">
-        <div class="icon">🐾</div>
-        <h3>Animales</h3>
-        <p>Consulta la lista de animales y sus necesidades básicas.</p>
-        <a href="#">Ver Animales</a>
+        <div class="icon">📅</div>
+        <h3>Mi Disponibilidad</h3>
+        <p>Define los días y horas en los que puedes apoyar en el refugio.</p>
+        <a href="{{ route('volunteer.availability') }}">Gestionar Horario</a>
     </div>
     <div class="admin-card">
         <div class="icon">📊</div>
         <h3>Mi Progreso</h3>
         <p>Consulta las actividades que has realizado recientemente.</p>
-        <a href="#">Ver Historial</a>
+        <a href="{{ route('volunteer.tasks') }}">Ver Historial</a>
     </div>
 </section>
 @endsection

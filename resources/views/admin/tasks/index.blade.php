@@ -6,65 +6,65 @@
 <div style="max-width: 1100px; margin: 30px auto; padding: 20px;">
     <h2>Asignación de Tareas</h2>
     
-    <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 40px;">
-        <h3>Asignar Nueva Tarea</h3>
-        <form action="{{ route('admin.tasks.store') }}" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <div class="premium-card" style="margin-bottom: 50px; border-left: 8px solid #2e8b57;">
+        <h3 style="margin-bottom: 25px; color: #1e293b;">🎯 Asignar Nueva Tarea</h3>
+        <form action="{{ route('admin.tasks.store') }}" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             @csrf
             <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Título de la Tarea</label>
-                <input type="text" name="Tar_titulo" required placeholder="Ej: Alimentar perros, Limpieza patio..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #475569;">Título de la Tarea</label>
+                <input type="text" name="Tar_titulo" required placeholder="Ej: Alimentar perros, Limpieza patio..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none;">
             </div>
             <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Voluntario Responsable</label>
-                <select name="Usu_documento" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #475569;">Voluntario Responsable</label>
+                <select name="Usu_documento" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; background: white;">
                     <option value="">Seleccione un voluntario</option>
                     @foreach($volunteers as $vol)
-                        <option value="{{ $vol->Usu_documento }}">{{ $vol->name }} ({{ $vol->Usu_documento }})</option>
+                        <option value="{{ $vol->Usu_documento }}">👤 {{ $vol->name }}</option>
                     @endforeach
                 </select>
             </div>
-            <div style="grid-column: span 2;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Descripción Detallada</label>
-                <textarea name="Tar_descripcion" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" rows="3"></textarea>
+            <div style="grid-column: span 1 / span 2;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #475569;">Fecha Límite</label>
+                <input type="date" name="Tar_fecha_limite" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none;">
             </div>
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Fecha Límite</label>
-                <input type="date" name="Tar_fecha_limite" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <div style="grid-column: span 1 / span 2;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #475569;">Instrucciones Detalladas</label>
+                <textarea name="Tar_descripcion" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none;" rows="3"></textarea>
             </div>
-            <div style="display: flex; align-items: flex-end;">
-                <button type="submit" style="background: #2e8b57; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;" onmouseover="this.style.background='#246d43'" onmouseout="this.style.background='#2e8b57'">
-                    Asignar Tarea ✅
-                </button>
+            <div style="grid-column: span 1 / span 2;">
+                <button type="submit" class="premium-btn premium-btn-primary" style="width: 100%; justify-content: center; padding: 15px;">Confirmar Asignación ✅</button>
             </div>
         </form>
     </div>
 
-    <h3>Historial de Tareas</h3>
-    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <thead style="background: #2e8b57; color: white;">
-            <tr>
-                <th style="padding: 12px;">Voluntario</th>
-                <th style="padding: 12px;">Título</th>
-                <th style="padding: 12px;">Estado</th>
-                <th style="padding: 12px;">Límite</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($tasks as $task)
-                <tr style="border-bottom: 1px solid #eee; text-align: center;">
-                    <td style="padding: 12px;">{{ $task->user->name }}</td>
-                    <td style="padding: 12px;">{{ $task->Tar_titulo }}</td>
-                    <td style="padding: 12px;">
-                        <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; 
-                            background: {{ $task->Tar_estado == 'Pendiente' ? '#fff3cd' : '#d4edda' }};
-                            color: {{ $task->Tar_estado == 'Pendiente' ? '#856404' : '#155724' }};">
-                            {{ $task->Tar_estado }}
-                        </span>
-                    </td>
-                    <td style="padding: 12px;">{{ $task->Tar_fecha_limite }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <h3 style="margin-bottom: 25px; color: #334155;">📋 Historial y Seguimiento</h3>
+    <div class="premium-card">
+        <div style="overflow-x: auto;">
+            <table class="premium-table">
+                <thead>
+                    <tr>
+                        <th>Voluntario</th>
+                        <th>Tarea / Objetivo</th>
+                        <th>Estado Actual</th>
+                        <th>Fecha Límite</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tasks as $task)
+                        <tr>
+                            <td style="font-weight: 700;">{{ $task->user->name }}</td>
+                            <td>{{ $task->Tar_titulo }}</td>
+                            <td>
+                                <span class="premium-btn" style="background: {{ $task->Tar_estado == 'Pendiente' ? '#fef3c7' : '#dcfce7' }}; color: {{ $task->Tar_estado == 'Pendiente' ? '#92400e' : '#166534' }}; padding: 4px 12px; font-size: 0.8em; border-radius: 20px;">
+                                    {{ $task->Tar_estado }}
+                                </span>
+                            </td>
+                            <td style="color: #64748b;">{{ \Carbon\Carbon::parse($task->Tar_fecha_limite)->format('d M, Y') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 @endsection

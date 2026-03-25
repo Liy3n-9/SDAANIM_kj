@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Availability;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +17,8 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::where('Usu_documento', Auth::user()->Usu_documento)
-            ->latest()
+            ->orderByRaw("FIELD(Tar_estado, 'Pendiente', 'Completada')")
+            ->latest('Tar_fecha_limite')
             ->get();
         return view('tasks.index', compact('tasks'));
     }
@@ -56,10 +59,19 @@ class TaskController extends Controller
             'Usu_documento' => 'required|exists:users,Usu_documento',
             'Tar_titulo' => 'required|string|max:255',
             'Tar_descripcion' => 'required|string',
-            'Tar_fecha_limite' => 'required|date',
+            'Tar_fecha_limite' => 'required|date|after_or_equal:today',
         ]);
 
-        Task::create([
+        // CHECK AVAILABILITY
+        $available = Availability::where('Usu_documento', $data['Usu_documento'])
+            ->where('Ava_date', $data['Tar_fecha_limite'])
+            ->exists();
+
+        if (!$available) {
+            return back()->withErrors(['error' => 'El voluntario no tiene disponibilidad registrada para esa fecha.'])->withInput();
+        }
+
+        $task = Task::create([
             'Usu_documento' => $data['Usu_documento'],
             'Tar_titulo' => $data['Tar_titulo'],
             'Tar_descripcion' => $data['Tar_descripcion'],
@@ -68,6 +80,14 @@ class TaskController extends Controller
             'Tar_estado' => 'Pendiente',
         ]);
 
-        return back()->with('success', 'Tarea asignada exitosamente.');
+        // NOTIFY VOLUNTEER
+        Notification::create([
+            'Usu_documento' => $data['Usu_documento'],
+            'Noti_mensaje' => "Se te ha asignado una nueva tarea: {$data['Tar_titulo']}",
+            'Noti_fecha' => now(),
+            'Noti_link' => route('volunteer.tasks'),
+        ]);
+
+        return back()->with('success', 'Tarea asignada exitosamente al voluntario disponible.');
     }
 }

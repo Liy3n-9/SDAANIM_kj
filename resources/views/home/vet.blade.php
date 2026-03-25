@@ -31,9 +31,9 @@
     </div>
     <div class="admin-card">
         <div class="icon">💉</div>
-        <h3>Tratamientos y Vacunas</h3>
-        <p>Registra y haz seguimiento a los tratamientos y planes de vacunación vigentes.</p>
-        <a href="#">Ver Tratamientos</a>
+        <h3>Mi Disponibilidad</h3>
+        <p>Registra y gestiona tu horario de atención y disponibilidad médica.</p>
+        <a href="{{ route('vet.availability') }}">Gestionar Horario</a>
     </div>
     <div class="admin-card">
         <div class="icon">🩺</div>

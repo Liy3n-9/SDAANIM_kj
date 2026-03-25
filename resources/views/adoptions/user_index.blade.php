@@ -16,8 +16,8 @@
                     <p><strong>Fecha:</strong> {{ $request->Soli_fecha }}</p>
                     <p><strong>Estado:</strong> 
                         <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; 
-                            background: {{ $request->Soli_estado == 'Pendiente' ? '#fff3cd' : ($request->Soli_estado == 'Aprobada' ? '#d4edda' : '#f8d7da') }};
-                            color: {{ $request->Soli_estado == 'Pendiente' ? '#856404' : ($request->Soli_estado == 'Aprobada' ? '#155724' : '#721c24') }};">
+                            background: {{ $request->Soli_estado == 'Pendiente' ? '#fff3cd' : ($request->Soli_estado == 'En Proceso' ? '#e0f7fa' : ($request->Soli_estado == 'Aprobada' ? '#d4edda' : '#f8d7da')) }};
+                            color: {{ $request->Soli_estado == 'Pendiente' ? '#856404' : ($request->Soli_estado == 'En Proceso' ? '#006064' : ($request->Soli_estado == 'Aprobada' ? '#155724' : '#721c24')) }};">
                             {{ $request->Soli_estado }}
                         </span>
                     </p>
