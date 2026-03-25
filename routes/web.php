@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\MedicalHistoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\InscriptionController;
 
 // --- GUEST / PUBLIC ROUTES ---
 Route::get('/', function () {
@@ -36,6 +38,10 @@ Route::post('/registrar', [App\Http\Controllers\Auth\RegisterController::class, 
 // --- PROTECTED ROUTES (AUTH) ---
 Route::middleware(['auth'])->group(function () {
     
+    // PROFILE
+    Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
+
     // REDIRECTION ROUTE (Universal Dashboard)
     Route::get('/dashboard', function () {
         return match (Auth::user()->role) {
@@ -64,6 +70,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', function () { return view('home.volunteer'); })->name('dashboard');
         Route::get('/tareas', [TaskController::class, 'index'])->name('tasks');
         Route::post('/tareas/{id}/completar', [TaskController::class, 'complete'])->name('tasks.complete');
+        
+        // Availability
+        Route::get('/disponibilidad', [AvailabilityController::class, 'index'])->name('availability');
+        Route::post('/disponibilidad', [AvailabilityController::class, 'store'])->name('availability.store');
+        Route::delete('/disponibilidad/{id}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
     });
 
     // VET PANEL
@@ -72,6 +83,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/animales', [AnimalController::class, 'index'])->name('animals');
         Route::get('/historial/{animal_id}', [MedicalHistoryController::class, 'index'])->name('history');
         Route::post('/historial', [MedicalHistoryController::class, 'store'])->name('history.store');
+
+        // Availability
+        Route::get('/disponibilidad', [AvailabilityController::class, 'index'])->name('availability');
+        Route::post('/disponibilidad', [AvailabilityController::class, 'store'])->name('availability.store');
+        Route::delete('/disponibilidad/{id}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
     });
 
     // ADMIN PANEL
@@ -86,6 +102,11 @@ Route::middleware(['auth'])->group(function () {
         // Admin Task management
         Route::get('/tareas', [TaskController::class, 'adminIndex'])->name('tasks.index');
         Route::post('/tareas', [TaskController::class, 'store'])->name('tasks.store');
+
+        // Inscriptions (Vet/Volunteer requests)
+        Route::get('/inscripciones', [InscriptionController::class, 'adminIndex'])->name('inscriptions.index');
+        Route::post('/inscripciones/{id}/approve', [InscriptionController::class, 'approve'])->name('inscriptions.approve');
+        Route::post('/inscripciones/{id}/reject', [InscriptionController::class, 'reject'])->name('inscriptions.reject');
     });
 
 });
