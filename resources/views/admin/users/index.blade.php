@@ -7,39 +7,45 @@
     <h2>Usuarios del Sistema</h2>
     <p>Administra los roles y estados de los usuarios registrados.</p>
     
-    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-top: 20px;">
-        <thead style="background: #2e8b57; color: white;">
-            <tr>
-                <th style="padding: 12px;">Documento</th>
-                <th style="padding: 12px;">Nombre</th>
-                <th style="padding: 12px;">Email</th>
-                <th style="padding: 12px;">Rol</th>
-                <th style="padding: 12px;">Estado</th>
-                <th style="padding: 12px;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-                <tr style="border-bottom: 1px solid #eee; text-align: center;">
-                    <td style="padding: 12px;">{{ $user->Usu_documento }}</td>
-                    <td style="padding: 12px;">{{ $user->name }}</td>
-                    <td style="padding: 12px;">{{ $user->email }}</td>
-                    <td style="padding: 12px;">
-                        <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; background: #e9f7ef; color: #2e8b57;">
-                            {{ $user->role }}
-                        </span>
-                    </td>
-                    <td style="padding: 12px;">
-                        <span style="color: {{ $user->status == 'Activo' ? '#28a745' : '#dc3545' }}; font-weight: bold;">
-                            {{ $user->status }}
-                        </span>
-                    </td>
-                    <td style="padding: 12px;">
-                        <button style="background: #20B2AA; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Editar</button>
-                    </td>
+<div class="premium-card" style="margin-top: 20px;">
+    <h3 style="margin-bottom: 25px; color: #1e293b;">Lista de Usuarios Registrados</h3>
+    <div style="overflow-x: auto;">
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Nombre Principal</th>
+                    <th>Correo Electrónico</th>
+                    <th>Rol Asignado</th>
+                    <th>Estado</th>
+                    <th style="text-align: center;">Acciones</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <td style="font-weight: 700;">{{ $user->Usu_documento }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td style="color: #64748b;">{{ $user->email }}</td>
+                        <td>
+                            <span class="premium-btn" style="background: {{ $user->role == 'Administrador' ? '#fee2e2' : ($user->role == 'Veterinario' ? '#e0f2fe' : '#f0fdf4') }}; color: {{ $user->role == 'Administrador' ? '#991b1b' : ($user->role == 'Veterinario' ? '#075985' : '#166534') }}; padding: 4px 12px; font-size: 0.8em;">
+                                {{ $user->role }}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: {{ $user->status == 'Activo' ? '#22c55e' : '#ef4444' }};"></div>
+                                <span style="font-size: 0.9em; font-weight: 600;">{{ $user->status }}</span>
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <button class="premium-btn" style="background: #f1f5f9; color: #475569; padding: 6px 15px; font-size: 0.85em;">Configurar</button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 </div>
 @endsection

@@ -17,31 +17,34 @@
 @endsection
 
 @section('content')
-<section class="adopta-section">
-    <h2>Adopta</h2>
-    <p>Encuentra a tu nuevo mejor amigo 🐾. Tenemos muchos peluditos esperando un hogar lleno de amor.</p>
+<section style="padding: 40px 20px; max-width: 1200px; margin: 0 auto; text-align: center;">
+    <h1 style="color: #2e8b57; margin-bottom: 10px; font-weight: 800;">Adopta un Amigo 🐾</h1>
+    <p style="color: #64748b; margin-bottom: 40px;">Encuentra el compañero perfecto para tu hogar.</p>
 
-    <!-- FILTROS -->
-    <div class="adopta-filtros">
-        <a href="{{ route('adopta', ['etapa' => 'todos']) }}" class="filtro-btn {{ $etapaFiltro == 'todos' ? 'activo' : '' }}">Todos</a>
-        <a href="{{ route('adopta', ['etapa' => 'cachorro']) }}" class="filtro-btn {{ $etapaFiltro == 'cachorro' ? 'activo' : '' }}">Cachorros</a>
-        <a href="{{ route('adopta', ['etapa' => 'joven']) }}" class="filtro-btn {{ $etapaFiltro == 'joven' ? 'activo' : '' }}">Jóvenes</a>
-        <a href="{{ route('adopta', ['etapa' => 'adulto']) }}" class="filtro-btn {{ $etapaFiltro == 'adulto' ? 'activo' : '' }}">Mayores</a>
+    <!-- FILTROS SIMPLE -->
+    <div style="margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <a href="{{ route('adopta', ['etapa' => 'todos']) }}" class="premium-btn" style="background: {{ $etapaFiltro == 'todos' ? 'var(--primary-adopter)' : '#fff' }}; color: {{ $etapaFiltro == 'todos' ? '#fff' : '#64748b' }}; border: 1px solid #ddd;">Todos</a>
+        <a href="{{ route('adopta', ['etapa' => 'cachorro']) }}" class="premium-btn" style="background: {{ $etapaFiltro == 'cachorro' ? 'var(--primary-adopter)' : '#fff' }}; color: {{ $etapaFiltro == 'cachorro' ? '#fff' : '#64748b' }}; border: 1px solid #ddd;">Cachorros</a>
+        <a href="{{ route('adopta', ['etapa' => 'joven']) }}" class="premium-btn" style="background: {{ $etapaFiltro == 'joven' ? 'var(--primary-adopter)' : '#fff' }}; color: {{ $etapaFiltro == 'joven' ? '#fff' : '#64748b' }}; border: 1px solid #ddd;">Jóvenes</a>
+        <a href="{{ route('adopta', ['etapa' => 'adulto']) }}" class="premium-btn" style="background: {{ $etapaFiltro == 'adulto' ? 'var(--primary-adopter)' : '#fff' }}; color: {{ $etapaFiltro == 'adulto' ? '#fff' : '#64748b' }}; border: 1px solid #ddd;">Adultos</a>
     </div>
 
-    <!-- CARDS -->
-    <div class="adopta-grid">
+    <!-- CARDS GRID WITH SPACING -->
+    <div class="premium-grid">
         @forelse($animals as $animal)
-            <div class="adopta-card">
-                <img src="{{ asset('img/' . $animal->Anim_foto) }}" alt="{{ $animal->Anim_nombre }}">
-                <h3>{{ $animal->Anim_nombre }}</h3>
-                <p><strong>Raza:</strong> {{ $animal->Anim_raza }}</p>
-                <p><strong>Edad:</strong> {{ $animal->Anim_edad }}</p>
-                <p><strong>Sexo:</strong> {{ $animal->Anim_sexo }}</p>
-                <a href="{{ route('adopter.adoption.create', $animal->Anim_id) }}" class="adoptar-btn">❤️ Adoptame</a>
+            <div class="premium-card" style="padding: 0; overflow: hidden; text-align: left;">
+                <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" style="width: 100%; height: 250px; object-fit: cover;">
+                <div style="padding: 20px;">
+                    <h3 style="margin: 0; color: #333;">{{ $animal->Anim_nombre }}</h3>
+                    <p style="color: #666; font-size: 0.9em; margin: 10px 0;">
+                        {{ $animal->Anim_raza }} • {{ $animal->Anim_sexo }} <br>
+                        {{ $animal->Anim_edad }}
+                    </p>
+                    <a href="{{ route('adopter.adoption.create', $animal->Anim_id) }}" class="premium-btn premium-btn-adopter" style="width: 100%; justify-content: center;">¡Quiero Adoptarlo! ❤️</a>
+                </div>
             </div>
         @empty
-            <p>No hay animales disponibles actualmente 🐾</p>
+            <p style="grid-column: 1/-1; padding: 50px; color: #999;">No hay peluditos disponibles por ahora 🐾</p>
         @endforelse
     </div>
 </section>

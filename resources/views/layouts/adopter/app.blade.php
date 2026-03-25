@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | JKD</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/premium.css') }}">
     @yield('styles')
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
@@ -54,10 +55,25 @@
         </div>
     </header>
 
-    <div id="notifSidebar" class="notif-sidebar">
+    <div id="notifSidebar" class="notif-sidebar sidebar-adopter">
         <button class="close-btn" onclick="toggleSidebar()">✖</button>
         <h3>Notificaciones</h3>
-        <a href="{{ route('adopter.profile') }}">📋 Mi Perfil</a>
+        <div style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+            @auth
+                @forelse(\App\Models\Notification::where('Usu_documento', Auth::user()->Usu_documento)->latest()->take(5)->get() as $notification)
+                    <a href="{{ $notification->Noti_link ?? '#' }}" style="font-size: 0.85em; border-left: 3px solid #2d7d46; margin-bottom: 5px; background: #fcfcfc;">
+                        {{ $notification->Noti_mensaje }}<br>
+                        <small style="color: #999;">{{ \Carbon\Carbon::parse($notification->Noti_fecha)->diffForHumans() }}</small>
+                    </a>
+                @empty
+                    <p style="text-align: center; color: #999; font-size: 0.9em;">No tienes notificaciones.</p>
+                @endforelse
+            @else
+                <p style="text-align: center; color: #999; font-size: 0.9em;">Inicia sesión para ver tus notificaciones.</p>
+            @endauth
+        </div>
+        <h3>Mi Cuenta</h3>
+        <a href="{{ route('profile.edit') }}">📋 Mi Perfil</a>
         <a href="{{ route('adopter.requests') }}">🐾 Mis Solicitudes</a>
     </div>
 

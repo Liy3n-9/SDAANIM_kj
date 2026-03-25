@@ -15,7 +15,16 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('profiles.edit', compact('user'));
+        $role = strtolower($user->role);
+        
+        // Match view name with role
+        $view = "profiles.edit_{$role}";
+        
+        if (!view()->exists($view)) {
+            $view = 'profiles.edit'; // Fallback
+        }
+
+        return view($view, compact('user'));
     }
 
     /**

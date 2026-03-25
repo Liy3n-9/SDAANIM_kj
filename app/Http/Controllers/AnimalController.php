@@ -66,9 +66,9 @@ class AnimalController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'Anim_nombre' => 'required|string|max:50',
-            'Anim_raza' => 'required|string|max:50',
-            'Anim_edad' => 'required|string|max:20',
+            'Anim_nombre' => 'required|string|max:100',
+            'Anim_raza' => 'required|string|max:100',
+            'Anim_edad' => 'required|string|max:100',
             'Anim_sexo' => 'required|string|max:10',
             'Anim_historia' => 'nullable|string',
             'Anim_estado' => 'required|string|max:20',
@@ -103,9 +103,9 @@ class AnimalController extends Controller
         $animal = Animal::findOrFail($id);
         
         $data = $request->validate([
-            'Anim_nombre' => 'required|string|max:50',
-            'Anim_raza' => 'required|string|max:50',
-            'Anim_edad' => 'required|string|max:20',
+            'Anim_nombre' => 'required|string|max:100',
+            'Anim_raza' => 'required|string|max:100',
+            'Anim_edad' => 'required|string|max:100',
             'Anim_sexo' => 'required|string|max:10',
             'Anim_historia' => 'nullable|string',
             'Anim_estado' => 'required|string|max:20',
