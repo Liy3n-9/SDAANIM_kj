@@ -4,13 +4,48 @@
 
 @section('styles')
 <style>
-    .admin-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px; }
-    .admin-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #007acc; transition: all 0.3s ease; text-align: center; }
-    .admin-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-    .admin-card h3 { color: #007acc; font-size: 1.4em; margin-bottom: 10px; }
-    .admin-card p { color: #555; font-size: 0.95em; margin-bottom: 20px; }
-    .admin-card a { display: inline-block; background: linear-gradient(90deg, #4a90e2, #007acc); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; }
-    .admin-card .icon { font-size: 40px; color: #007acc; margin-bottom: 10px; }
+    .admin-sections { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+        gap: 25px; padding: 20px; 
+    }
+    .admin-card { 
+        background: white; 
+        padding: 25px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        border-top: 5px solid #007acc; 
+        transition: all 0.3s ease; 
+        text-align: center; 
+    }
+    .admin-card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
+    }
+    .admin-card h3 { 
+        color: #007acc; 
+        font-size: 1.4em; 
+        margin-bottom: 10px; 
+    }
+    .admin-card p { 
+        color: #555; 
+        font-size: 0.95em; 
+        margin-bottom: 20px; 
+    }
+    .admin-card a { 
+        display: inline-block; 
+        background: linear-gradient(90deg, #4a90e2, #007acc); 
+        color: white; padding: 10px 20px; 
+        border-radius: 6px; 
+        text-decoration: none; 
+        font-weight: bold; 
+        transition: background 0.3s ease; 
+    }
+    .admin-card .icon { 
+        font-size: 40px; 
+        color: #007acc; 
+        margin-bottom: 10px; 
+    }
 </style>
 @endsection
 
