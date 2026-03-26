@@ -4,155 +4,155 @@
 
 @section('content')
 
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
-<!-- Banner -->
-<div class="banner">
-    <h2>¡Encuentra a tu nuevo mejor amigo!</h2>
-    <p>Todos los animales de la calle necesitan nuestra protección.
-        <br>¡Ayúdanos hoy!
-    </p>
-</div>
-
-<!-- Recién llegados -->
-<div class="section-header">
-    <h3>Recién llegados</h3>
-    <a href="{{ route('adopta') }}">Ver más</a>
-</div>
-
-<br>
-
-<!-- Carrusel -->
-<div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-
-        @forelse($animals ?? [] as $animal)
-        <div class="swiper-slide">
-            <div class="card">
-                <a href="{{ route('animal.show', $animal->Anim_id) }}">
-                    <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" alt="{{ $animal->Anim_nombre }}">
-                    <p>{{ $animal->Anim_nombre }} - {{ $animal->Anim_edad }}</p>
-                </a>
-            </div>
-        </div>
-        @empty
-        <div class="swiper-slide">
-            <div class="card">
-                <img src="https://placedog.net/600/400?id=1" alt="Zurito">
-                <p>Zurito - 1 año</p>
-            </div>
-        </div>
-        <div class="swiper-slide">
-            <div class="card">
-                <img src="https://placedog.net/600/400?id=2" alt="Hanna">
-                <p>Hanna - 3 meses</p>
-            </div>
-        </div>
-        @endforelse
-
+    <!-- Banner -->
+    <div class="banner">
+        <h2>¡Encuentra a tu nuevo mejor amigo!</h2>
+        <p>Todos los animales de la calle necesitan nuestra protección.
+            <br>¡Ayúdanos hoy!
+        </p>
     </div>
 
-    <!-- Botones -->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
+    <!-- Recién llegados -->
+    <div class="section-header">
+        <h3>Recién llegados</h3>
+        <a href="{{ route('adopta') }}">Ver más</a>
+    </div>
 
-    <!-- Paginación -->
-    <div class="swiper-pagination"></div>
-</div>
+    <br>
 
-<!-- Ubicación -->
-<h2>📍 Nuestra ubicación</h2>
-<div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+    <!-- Carrusel -->
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
 
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            @forelse($animals ?? [] as $animal)
+            <div class="swiper-slide">
+                <div class="card">
+                    <a href="{{ route('animal.show', $animal->Anim_id) }}">
+                        <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" alt="{{ $animal->Anim_nombre }}">
+                        <p>{{ $animal->Anim_nombre }} - {{ $animal->Anim_edad }}</p>
+                    </a>
+                </div>
+            </div>
+            @empty
+            <div class="swiper-slide">
+                <div class="card">
+                    <img src="https://placedog.net/600/400?id=1" alt="Zurito">
+                    <p>Zurito - 1 año</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="card">
+                    <img src="https://placedog.net/600/400?id=2" alt="Hanna">
+                    <p>Hanna - 3 meses</p>
+                </div>
+            </div>
+            @endforelse
 
-<script>
-    // Inicializar carrusel
-    const swiper = new Swiper(".mySwiper", {
-        slidesPerView: 3,
-        spaceBetween: 20,
-        loop: true,
+        </div>
 
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
+        <!-- Botones -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
 
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
+        <!-- Paginación -->
+        <div class="swiper-pagination"></div>
+    </div>
 
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
+    <!-- Ubicación -->
+    <h2>📍 Nuestra ubicación</h2>
+    <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
 
-        breakpoints: {
-            0: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 }
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Inicializar carrusel
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 20,
+            loop: true,
+
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+
+            breakpoints: {
+                0: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 }
+            }
+        });
+
+        // Google Maps
+        function initMap() {
+            const ubicacion = {
+                lat: 10.920758332832074,
+                lng: -74.824875070815
+            };
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: ubicacion,
+            });
+
+            new google.maps.Marker({
+                position: ubicacion,
+                map: map,
+                title: "Esperanza Animal BQ 🐾"
+            });
         }
-    });
+    </script>
 
-    // Google Maps
-    function initMap() {
-        const ubicacion = {
-            lat: 10.920758332832074,
-            lng: -74.824875070815
-        };
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSxjXAhrgyp8ytXfE_3WEjiFvGUz61woM&callback=initMap">
+    </script>
 
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 15,
-            center: ubicacion,
-        });
-
-        new google.maps.Marker({
-            position: ubicacion,
-            map: map,
-            title: "Esperanza Animal BQ 🐾"
-        });
+    <!-- Estilos -->
+    <style>
+    .swiper {
+        width: 100%;
+        padding: 20px 0;
     }
-</script>
 
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSxjXAhrgyp8ytXfE_3WEjiFvGUz61woM&callback=initMap">
-</script>
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
 
-<!-- Estilos -->
-<style>
-.swiper {
-    width: 100%;
-    padding: 20px 0;
-}
+    .card {
+        width: 100%;
+        max-width: 300px;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
 
-.swiper-slide {
-    display: flex;
-    justify-content: center;
-}
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
 
-.card {
-    width: 100%;
-    max-width: 300px;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
+    .card p {
+        padding: 10px;
+        font-weight: bold;
+    }
+    </style>
 
-.card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card p {
-    padding: 10px;
-    font-weight: bold;
-}
-</style>
-
-@endsection
+    @endsection
