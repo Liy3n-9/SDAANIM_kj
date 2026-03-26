@@ -73,17 +73,9 @@
             </div>
         @endif
 
-        
-        {{-- ✅ Bloque para mostrar notificación de bienvenida --}}
         @if(session('welcome'))
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
-                Swal.fire({
-                    title: 'Bienvenido',
-                    text: "{{ session('welcome') }}",
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
+                alert("{{ session('welcome') }}");
             </script>
         @endif
 
