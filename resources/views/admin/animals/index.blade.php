@@ -1,8 +1,9 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Gestión de Animales | SDAANIM')
+@section('title', 'Gestión de Animales')
 
 @section('content')
+<<<<<<< HEAD
 <div style="max-width: 1100px; margin: 30px auto; padding: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h2>Animales en el Refugio</h2>
@@ -35,5 +36,44 @@
             </div>
         @endforeach
     </div>
+=======
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eef2f5; padding-bottom: 10px;">
+    <h1 style="font-size: 1.75rem; font-weight: 700; color: #2e8b57; margin: 0;">Animales en el Refugio</h1>
+    <a href="{{ route('admin.animals.create') }}" style="background: linear-gradient(90deg, #2e8b57, #4caf50); color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">+ Agregar Animal</a>
+>>>>>>> f395b0108094aa578f674cc5e814ef4b188bfbb7
 </div>
+
+<div class="premium-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+    @foreach($animals as $animal)
+        <div class="admin-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; text-align: left; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 1px solid #eef2f5;">
+            <div style="height: 200px; position: relative;">
+                <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #2e8b57; border: 1px solid #eef2f5; backdrop-filter: blur(4px);">
+                    {{ $animal->Anim_estado }}
+                </div>
+            </div>
+            <div style="padding: 15px; flex-grow: 1;">
+                <h3 style="margin: 0; font-size: 1.15rem; color: #2e8b57; font-weight: 700;">{{ $animal->Anim_nombre }}</h3>
+                <p style="color: #64748b; margin: 8px 0; font-size: 0.85rem; line-height: 1.4;">
+                    <span style="display: block;"><strong>Raza:</strong> {{ $animal->Anim_raza }}</span>
+                    <span><strong>Edad:</strong> {{ $animal->Anim_edad }}</span>
+                </p>
+            </div>
+            <div style="padding: 12px 15px; background: #f8fafc; border-top: 1px solid #eef2f5; display: flex; gap: 8px;">
+                <a href="{{ route('admin.animals.edit', $animal->Anim_id) }}" style="flex: 1; text-align: center; background: #e9f7ef; color: #2e8b57; font-size: 0.8rem; padding: 8px; border-radius: 6px; font-weight: bold; text-decoration: none; border: 1px solid #d4edda;">Editar</a>
+                <form action="{{ route('admin.animals.destroy', $animal->Anim_id) }}" method="POST" style="flex: 1;" onsubmit="return confirm('¿Eliminar?')">
+                    @csrf @method('DELETE')
+                    <button type="submit" style="width: 100%; background: #fee2e2; color: #991b1b; font-size: 0.8rem; padding: 8px; border-radius: 6px; font-weight: bold; border: 1px solid #fecaca; cursor: pointer;">Borrar</button>
+                </form>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+<style>
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+</style>
 @endsection

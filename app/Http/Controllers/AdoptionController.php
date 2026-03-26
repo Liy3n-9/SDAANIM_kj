@@ -34,7 +34,16 @@ class AdoptionController extends Controller
             'comentarios' => 'nullable|string',
         ]);
 
-        AdoptionRequest::create([
+        // FIND AVAILABLE VOLUNTEER
+        $availability = \App\Models\Availability::where('Ava_status', 'Disponible')
+            ->where('Ava_date', '>=', now()->toDateString())
+            ->orderBy('Ava_date')
+            ->orderBy('Ava_start_time')
+            ->first();
+
+        $volDocumento = $availability ? $availability->Usu_documento : null;
+
+        $solicitud = AdoptionRequest::create([
             'Usu_documento' => Auth::user()->Usu_documento,
             'Anim_id' => $data['animal_id'],
             'Soli_motivo' => $data['motivo'],
@@ -42,8 +51,49 @@ class AdoptionController extends Controller
             'Soli_tipo_vivienda' => $data['tipo_vivienda'],
             'Soli_tiempo_disponible' => $data['tiempo_disponible'],
             'Soli_comentarios' => $data['comentarios'],
+            'Soli_fecha' => now(),
             'Soli_estado' => 'Pendiente',
+            'Soli_voluntario' => $volDocumento,
         ]);
+
+        // IF VOLUNTEER ASSIGNED, CREATE TASK AND NOTIFY
+        if ($availability) {
+            // Mark availability as assigned (optional, but good for keeping track)
+            $availability->update(['Ava_status' => 'Asignado']);
+
+            Task::create([
+                'Usu_documento' => $volDocumento,
+                'Tar_titulo' => "Seguimiento Adopción: {$solicitud->animal->Anim_nombre}",
+                'Tar_descripcion' => "Realizar seguimiento a la nueva solicitud de {$solicitud->user->name}. Cita programada según disponibilidad: {$availability->Ava_date} a las {$availability->Ava_start_time}.",
+                'Tar_fecha_limite' => $availability->Ava_date,
+                'Tar_fecha_asignacion' => now(),
+                'Tar_estado' => 'Pendiente',
+            ]);
+
+            Notification::create([
+                'Usu_documento' => $volDocumento,
+                'Noti_mensaje' => "Nueva solicitud asignada: {$solicitud->animal->Anim_nombre}. Cita: {$availability->Ava_date}.",
+                'Noti_fecha' => now(),
+                'Noti_link' => route('volunteer.tasks'),
+            ]);
+
+            // NOTIFY ADOPTER
+            $volName = $availability->user->name;
+            Notification::create([
+                'Usu_documento' => Auth::user()->Usu_documento,
+                'Noti_mensaje' => "Tu solicitud para {$solicitud->animal->Anim_nombre} ha sido recibida. El voluntario {$volName} te atenderá el {$availability->Ava_date} a las {$availability->Ava_start_time}.",
+                'Noti_fecha' => now(),
+                'Noti_link' => route('adopter.requests'),
+            ]);
+        } else {
+            // NOTIFY ADOPTER WITHOUT VOLUNTEER
+            Notification::create([
+                'Usu_documento' => Auth::user()->Usu_documento,
+                'Noti_mensaje' => "Tu solicitud para {$solicitud->animal->Anim_nombre} ha sido recibida y está pendiente de asignación de voluntario.",
+                'Noti_fecha' => now(),
+                'Noti_link' => route('adopter.requests'),
+            ]);
+        }
 
         return redirect()->route('adopter.requests')->with('success', 'Solicitud enviada correctamente.');
     }

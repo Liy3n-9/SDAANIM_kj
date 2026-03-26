@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\BienvenidaMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -36,6 +38,9 @@ class RegisterController extends Controller
             'role' => 'Adoptante',
             'status' => 'Activo',
         ]);
+
+        Mail::to($user->email)
+            ->send(new BienvenidaMail($user->name));
 
         return redirect()->route('login')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
     }
