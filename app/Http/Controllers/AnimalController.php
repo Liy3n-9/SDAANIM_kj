@@ -155,4 +155,14 @@ class AnimalController extends Controller
             return 'adulto';
         }
     }
+
+    public function adopterDashboard()
+    {
+        $animals = Animal::where('Anim_estado', 'Disponible')
+                        ->latest('Anim_id')
+                        ->take(6)
+                        ->get();
+
+        return view('home.adopter', compact('animals'));
+    }
 }

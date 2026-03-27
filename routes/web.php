@@ -60,7 +60,11 @@ Route::middleware(['auth'])->group(function () {
 
     // ADOPTER PANEL
     Route::prefix('adopter')->name('adopter.')->group(function () {
-        Route::get('/dashboard', function () { return view('home.adopter'); })->name('dashboard');
+
+        // ✅ AQUÍ ESTÁ EL FIX REAL
+        Route::get('/dashboard', [AnimalController::class, 'adopterDashboard'])
+            ->name('dashboard');
+
         Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile');
         Route::post('/perfil', [ProfileController::class, 'update']);
         Route::get('/mis-solicitudes', [AdoptionController::class, 'userRequests'])->name('requests');
@@ -76,7 +80,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tareas', [TaskController::class, 'index'])->name('tasks');
         Route::post('/tareas/{id}/completar', [TaskController::class, 'complete'])->name('tasks.complete');
         Route::post('/tareas/{id}/estado', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
-        
+    
         // Availability
         Route::get('/disponibilidad', [AvailabilityController::class, 'index'])->name('availability');
         Route::post('/disponibilidad', [AvailabilityController::class, 'store'])->name('availability.store');
