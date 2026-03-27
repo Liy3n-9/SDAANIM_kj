@@ -15,55 +15,62 @@
         </p>
     </div>
 
-    <!-- Recién llegados -->
-    <div class="section-header">
-        <h3>Recién llegados</h3>
-        <a href="{{ route('adopta') }}">Ver más</a>
-    </div>
+        <!-- Recién llegados -->
+<div class="section-header">
+    <h3>Recién llegados</h3>
+    <a href="{{ route('adopta') }}">Ver más</a>
+</div>
 
-    <br>
+<br>
 
-    <!-- Carrusel -->
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
+<!-- Carrusel -->
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
 
-            @forelse($animals ?? [] as $animal)
-            <div class="swiper-slide">
-                <div class="card">
-                    <a href="{{ route('animal.show', $animal->Anim_id) }}">
-                        <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" alt="{{ $animal->Anim_nombre }}">
-                        <p>{{ $animal->Anim_nombre }} - {{ $animal->Anim_edad }}</p>
-                    </a>
-                </div>
+        @forelse($animals ?? [] as $animal)
+        <div class="swiper-slide">
+            <div class="card">
+                <a href="javascript:void(0);" 
+                    onclick="abrirModal(
+                        '{{ $animal->Anim_nombre }}',
+                        '{{ $animal->Anim_edad }}',
+                        '{{ $animal->Anim_raza }}',
+                        '{{ $animal->Anim_historia ?? 'Sin historia disponible' }}',
+                        '{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}'
+                    )">
+                    <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" alt="{{ $animal->Anim_nombre }}">
+                    <p>{{ $animal->Anim_nombre }} - {{ $animal->Anim_edad }}</p>
+                </a>
             </div>
-            @empty
-            <div class="swiper-slide">
-                <div class="card">
-                    <img src="https://placedog.net/600/400?id=1" alt="Zurito">
-                    <p>Zurito - 1 año</p>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="card">
-                    <img src="https://placedog.net/600/400?id=2" alt="Hanna">
-                    <p>Hanna - 3 meses</p>
-                </div>
-            </div>
-            @endforelse
-
         </div>
+        @empty
+        <div class="swiper-slide">
+            <div class="card">
+                <img src="https://placedog.net/600/400?id=1" alt="Zurito">
+                <p>Zurito - 1 año</p>
+            </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card">
+                <img src="https://placedog.net/600/400?id=2" alt="Hanna">
+                <p>Hanna - 3 meses</p>
+            </div>
+        </div>
+        @endforelse
 
-        <!-- Botones -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-
-        <!-- Paginación -->
-        <div class="swiper-pagination"></div>
     </div>
 
-    <!-- Ubicación -->
-    <h2>📍 Nuestra ubicación</h2>
-    <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+    <!-- Botones -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+
+    <!-- Paginación -->
+    <div class="swiper-pagination"></div>
+</div>
+
+<!-- Ubicación -->
+<h2>📍 Nuestra ubicación</h2>
+<div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -153,6 +160,87 @@
         padding: 10px;
         font-weight: bold;
     }
+
+    /* MODAL */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+        background: white;
+        margin: 5% auto;
+        padding: 25px;
+        width: 90%;
+        max-width: 400px;
+        border-radius: 15px;
+        text-align: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .close {
+        float: right;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(-20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
     </style>
+
+    <!-- MODAL -->
+    <div id="animalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+
+            <img id="modalImg" src="" alt="">
+
+            <h2 id="modalNombre"></h2>
+            <p><strong>Edad:</strong> <span id="modalEdad"></span></p>
+            <p><strong>Raza:</strong> <span id="modalRaza"></span></p>
+            <p id="modalHistoria"></p>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(nombre, edad, raza, historia, foto) {
+            document.getElementById('modalNombre').innerText = nombre;
+            document.getElementById('modalEdad').innerText = edad;
+            document.getElementById('modalRaza').innerText = raza;
+            document.getElementById('modalHistoria').innerText = historia;
+            document.getElementById('modalImg').src = foto;
+
+            document.getElementById('animalModal').style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('animalModal').style.display = 'none';
+        }
+
+        /* cerrar al hacer click afuera */
+        window.onclick = function(e) {
+            const modal = document.getElementById('animalModal');
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
 
     @endsection
