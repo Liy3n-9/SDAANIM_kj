@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <style>
-        body { margin: 0; font-family: 'Open Sans', sans-serif; background: #f4f7f6; color: #333; }
-        a { text-decoration: none; }
-        
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
         .admin-header {
             background: @yield('header-bg', 'linear-gradient(90deg,#4a90e2,#007acc)');
             color: white;
@@ -17,7 +26,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .admin-header .logo {
@@ -63,11 +72,25 @@
             border-bottom: 2px solid white;
         }
 
-        main { padding: 40px 20px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
-        footer { background: @yield('footer-bg', '#007acc'); color: white; text-align: center; padding: 15px 0; margin-top: 40px; font-size: 0.9em; }
+        main {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        footer {
+            background: @yield('footer-bg', '#007acc');
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
     </style>
     @yield('styles')
 </head>
+
 <body>
     <header class="admin-header">
         <div class="logo">
@@ -75,11 +98,15 @@
             <h2>@yield('panel-title', 'SDAANIM')</h2>
         </div>
         <div class="auth-info">
+            @auth
             <span>{{ Auth::user()->name }}</span>
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-btn">Cerrar sesión</button>
             </form>
+            @else
+            <a href="{{ route('login') }}">Iniciar sesión</a>
+            @endauth
         </div>
     </header>
 
@@ -91,4 +118,5 @@
         <p>© 2025 Esperanza Animal BQ | @yield('footer-text', 'SDAANIM')</p>
     </footer>
 </body>
+
 </html>

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Animal;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AdoptionController;
@@ -14,7 +14,6 @@ use App\Http\Controllers\MedicalHistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\InscriptionController;
-use App\Http\Controllers\NotificationController;
 
 // --- GUEST / PUBLIC ROUTES ---
 Route::get('/', function () {
@@ -22,27 +21,33 @@ Route::get('/', function () {
     return view('welcome', compact('animals'));
 })->name('welcome');
 
-Route::get('/quienes-somos', function () { return view('public.about'); })->name('about');
+Route::get('/quienes-somos', function () {
+    return view('public.about');
+})->name('about');
 Route::get('/adopta', [AnimalController::class, 'publicIndex'])->name('adopta');
 Route::get('/animal/{id}', [AnimalController::class, 'show'])->name('animal.show');
 Route::get('/productos', [ProductController::class, 'publicIndex'])->name('products.public');
-Route::get('/contacto', function () { return view('public.contact'); })->name('contact');
+Route::get('/contacto', function () {
+    return view('public.contact');
+})->name('contact');
 
 // --- AUTHENTICATION ---
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/registrar', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/registrar', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
+Route::get('/registrar', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/registrar', [RegisterController::class, 'register'])->name('register.custom');
+Route::get('/verificar', function () {
+    return view('auth.verify');
+})->name('verify');
+
+Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verify.code');
 
 // --- PROTECTED ROUTES (AUTH) ---
 Route::middleware(['auth'])->group(function () {
-    
-    // NOTIFICATIONS
-    Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notifications');
-    Route::delete('/notificaciones/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
-    
+
+
     // PROFILE
     Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
@@ -72,7 +77,9 @@ Route::middleware(['auth'])->group(function () {
 
     // VOLUNTEER PANEL
     Route::prefix('volunteer')->name('volunteer.')->group(function () {
-        Route::get('/dashboard', function () { return view('home.volunteer'); })->name('dashboard');
+        Route::get('/dashboard', function () {
+            return view('home.volunteer');
+        })->name('dashboard');
         Route::get('/tareas', [TaskController::class, 'index'])->name('tasks');
 
         // Actualizar estado de la tarea
@@ -92,7 +99,9 @@ Route::middleware(['auth'])->group(function () {
 
     // VET PANEL
     Route::prefix('vet')->name('vet.')->group(function () {
-        Route::get('/dashboard', function () { return view('home.vet'); })->name('dashboard');
+        Route::get('/dashboard', function () {
+            return view('home.vet');
+        })->name('dashboard');
         Route::get('/animales', [AnimalController::class, 'index'])->name('animals');
         Route::get('/historial/{animal_id}', [MedicalHistoryController::class, 'index'])->name('history');
         Route::post('/historial', [MedicalHistoryController::class, 'store'])->name('history.store');
@@ -105,14 +114,16 @@ Route::middleware(['auth'])->group(function () {
 
     // ADMIN PANEL
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
         Route::resource('animals', AnimalController::class);
         Route::resource('products', ProductController::class);
         Route::get('/solicitudes', [AdoptionController::class, 'adminIndex'])->name('requests.index');
         Route::post('/solicitudes/{id}/approve', [AdoptionController::class, 'approve'])->name('requests.approve');
         Route::post('/solicitudes/{id}/assign-volunteer', [AdoptionController::class, 'assignVolunteer'])->name('requests.assignVolunteer');
         Route::get('/usuarios', [ProfileController::class, 'adminIndex'])->name('users.index');
-        
+
         // Admin Task management
         Route::get('/tareas', [TaskController::class, 'adminIndex'])->name('tasks.index');
         Route::post('/tareas', [TaskController::class, 'store'])->name('tasks.store');

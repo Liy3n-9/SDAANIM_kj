@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/mm.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
+
 <body>
     <header class="main-header">
         <div class="header-top">
@@ -38,15 +40,14 @@
 
     <div class="login-container">
         <h2>Crear Cuenta</h2>
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{ route('register.custom') }}" method="POST">
             @csrf
             <input
                 type="text"
                 name="Usu_documento"
                 placeholder="Número de Documento"
                 value="{{ old('Usu_documento') }}"
-                required
-            />
+                required />
             @error('Usu_documento') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
@@ -54,8 +55,7 @@
                 name="name"
                 placeholder="Nombre Completo"
                 value="{{ old('name') }}"
-                required
-            />
+                required />
             @error('name') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
@@ -63,8 +63,7 @@
                 name="email"
                 placeholder="Correo Electrónico"
                 value="{{ old('email') }}"
-                required
-            />
+                required />
             @error('email') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
@@ -72,8 +71,7 @@
                 name="Usu_telefono"
                 placeholder="Número de Teléfono"
                 value="{{ old('Usu_telefono') }}"
-                required
-            />
+                required />
             @error('Usu_telefono') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
@@ -81,24 +79,21 @@
                 name="Usu_direccion"
                 placeholder="Dirección"
                 value="{{ old('Usu_direccion') }}"
-                required
-            />
+                required />
             @error('Usu_direccion') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
                 type="password"
                 name="password"
                 placeholder="Contraseña"
-                required
-            />
+                required />
             @error('password') <p style="color:red; font-size:0.8rem;">{{ $message }}</p> @enderror
 
             <input
                 type="password"
                 name="password_confirmation"
                 placeholder="Confirmar Contraseña"
-                required
-            />
+                required />
 
             <button type="submit" class="btn">Registrarse</button>
         </form>
@@ -112,5 +107,38 @@
         <br>
         <a href="{{ url('/') }}" class="btn volver-btn">Regresar</a>
     </div>
+    @if(session('mostrar_modal') || session('error'))
+    <div class="modal-overlay">
+        <div class="modal-box">
+
+            <h3>Verifica tu correo 📩</h3>
+            <p>Ingresa el código que te enviamos</p>
+
+            {{-- 🔥 MENSAJE DE ERROR --}}
+            @if(session('error'))
+            <p style="color:red; margin-top:10px; font-weight:bold;">
+                {{ session('error') }}
+            </p>
+            @endif
+
+            <form action="{{ url('/verificar') }}" method="POST">
+                @csrf
+
+                <input
+                    type="text"
+                    name="codigo"
+                    placeholder="Código de 6 dígitos"
+                    style="margin-top:15px; text-align:center; font-size:18px;"
+                    required>
+
+                <button type="submit" class="btn" style="margin-top:15px;">
+                    Verificar
+                </button>
+            </form>
+
+        </div>
+    </div>
+    @endif
 </body>
+
 </html>
