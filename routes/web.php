@@ -141,4 +141,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/tareas/{task}/assign-volunteer', [TaskController::class, 'assignVolunteer'])
         ->name('admin.tasks.assignVolunteer')
         ->middleware('auth');
+
+    // Notificaciones (puede ser para todos los roles, mostrando solo las relevantes)
+    Route::get('/notifications', function () {
+        return view('notifications.index');
+    })->name('notifications');
 });
