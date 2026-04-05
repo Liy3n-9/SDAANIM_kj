@@ -1,11 +1,25 @@
-@extends('layouts.volunteer.app')
+@php
+    $layout = match(Auth::user()->role) {
+        'Administrador' => 'layouts.admin.app',
+        'Veterinario' => 'layouts.vet.app',
+        'Adoptante' => 'layouts.adopter.app',
+        default => 'layouts.volunteer.app',
+    };
+@endphp
+
+@extends($layout)
 
 @section('title', 'Notificaciones | SDAANIM')
 
 @section('content')
 <div style="max-width: 800px; margin: 30px auto; padding: 20px;">
-    <h2>Centro de Notificaciones</h2>
-    <p>Todas tus actividades y actualizaciones en un solo lugar.</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+            <h2>Centro de Notificaciones</h2>
+            <p>Todas tus actividades y actualizaciones en un solo lugar.</p>
+        </div>
+        <a href="{{ route('dashboard') }}" style="text-decoration: none; background: #374151; color: white; padding: 8px 15px; border-radius: 8px; font-weight: 600;">← Volver</a>
+    </div>
 
     @if(session('success'))
         <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
@@ -24,7 +38,7 @@
                     <div style="flex: 1;">
                         <p style="margin: 0 0 8px 0; color: #1e293b; font-weight: 600;">{{ $notif->Noti_mensaje }}</p>
                         <p style="margin: 0; font-size: 0.85em; color: #64748b;">
-                            <strong>Fecha:</strong> {{ $notif->Noti_fecha->format('d/m/Y H:i') }}
+                            <strong>Fecha:</strong> {{ $notif->Noti_fecha ? $notif->Noti_fecha->format('d/m/Y') : '-' }}
                         </p>
                         @if($notif->Noti_link)
                             <a href="{{ $notif->Noti_link }}" style="display: inline-block; margin-top: 8px; color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 0.9em;">

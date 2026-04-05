@@ -4,6 +4,7 @@
 
 @section('content')
 <div style="max-width: 1100px; margin: 30px auto; padding: 20px;">
+    <a href="{{ route('dashboard') }}" style="display: inline-block; margin-bottom: 20px; background: #f1f5f9; color: #475569; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">← Volver al Inicio</a>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h2>Catálogo de Productos (Tienda)</h2>
         <a href="{{ route('admin.products.create') }}" style="background: #2e8b57; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none;">+ Agregar Producto</a>
@@ -27,7 +28,7 @@
                     <td style="padding: 12px;">{{ $product->prod_nombre }}</td>
                     <td style="padding: 12px;">{{ $product->prod_categoria }}</td>
                     <td style="padding: 12px;">${{ number_format($product->prod_precio, 0) }}</td>
-                    <td style="padding: 12px;">{{ $product->prod_stock }}</td>
+                    <td style="padding: 12px;">{{ $product->prod_cantidad }}</td>
                     <td style="padding: 12px;">
                         <a href="{{ route('admin.products.edit', $product->prod_id) }}" style="color: #007bff; font-weight: bold; margin-right: 10px; text-decoration: none;">Editar</a>
                         <form action="{{ route('admin.products.destroy', $product->prod_id) }}" method="POST" style="display:inline;">

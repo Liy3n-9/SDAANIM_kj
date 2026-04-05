@@ -1,4 +1,8 @@
-@extends('layouts.volunteer.app')
+@php
+    $layout = Auth::user()->role == 'Veterinario' ? 'layouts.vet.app' : 'layouts.volunteer.app';
+@endphp
+
+@extends($layout)
 
 @section('title', 'Mis Tareas | SDAANIM')
 
@@ -17,127 +21,130 @@
 
     <div style="margin-top: 20px;">
         @forelse($tasks as $task)
-            {{-- Tarjeta de tarea --}}
+
+            @php
+                $estado = $task->Tar_estado;
+                $routePrefix = Auth::user()->role == 'Veterinario' ? 'vet' : 'volunteer';
+
+                $colores = [
+                    'Pendiente' => ['bg' => '#fff3cd', 'text' => '#856404', 'border' => '#ffc107'],
+                    'Observación' => ['bg' => '#d1ecf1', 'text' => '#0c5460', 'border' => '#17a2b8'],
+                    'En Proceso' => ['bg' => '#ffeaa7', 'text' => '#d68910', 'border' => '#fd7e14'],
+                    'Completada' => ['bg' => '#d4edda', 'text' => '#155724', 'border' => '#28a745'],
+                ];
+            @endphp
+
             <div style="
                 background: white;
                 padding: 20px;
                 border-radius: 12px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 margin-bottom: 20px;
-                border-left: 5px solid {{ match($task->Tar_estado) {
-                    'Pendiente' => '#ffc107',
-                    'Observación' => '#17a2b8',
-                    'En Proceso' => '#fd7e14',
-                    'Completado' => '#28a745'
-                } }};
+                border-left: 5px solid {{ $colores[$estado]['border'] ?? '#ccc' }};
             ">
+
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    {{-- Información de la tarea --}}
+
+                    {{-- Info --}}
                     <div>
                         <h3 style="margin: 0; color: #2e8b57;">{{ $task->Tar_titulo }}</h3>
                         <p style="margin: 10px 0; color: #444;">{{ $task->Tar_descripcion }}</p>
-                        <p style="font-size: 0.9em; color: #666; margin: 2px 0;">
-                            <strong>Base:</strong> {{ $task->Tar_base ?? 'Centro Principal' }}
-                        </p>
-                        <p style="font-size: 0.9em; color: #666; margin: 2px 0;">
-                            <strong>Asignada el:</strong> {{ $task->Tar_fecha_asignacion->format('d/m/Y') }}
-                        </p>
-                        <p style="font-size: 0.9em; color: #666; margin: 2px 0;">
-                            <strong>Fecha de visita:</strong> {{ $task->Tar_fecha_limite->format('d/m/Y') }}@if($task->Tar_hora) a las {{ $task->Tar_hora }}@endif
+
+                        <p><strong>Base:</strong> {{ $task->Tar_base ?? 'Centro Principal' }}</p>
+                        <p><strong>Asignada el:</strong> {{ $task->Tar_fecha_asignacion ? $task->Tar_fecha_asignacion->format('d/m/Y') : '-' }}</p>
+                        <p>
+                            <strong>Fecha de visita:</strong>
+                            {{ $task->Tar_fecha_limite ? $task->Tar_fecha_limite->format('d/m/Y') : '-' }}
+                            @if($task->Tar_hora) a las {{ $task->Tar_hora }} @endif
                         </p>
                     </div>
 
-                    {{-- Estado de la tarea --}}
-                    <div>
-                        <span style="
-                            padding: 5px 12px;
-                            border-radius: 20px;
-                            font-size: 0.8em;
-                            font-weight: bold;
-                            background: {{ match($task->Tar_estado) {
-                                'Pendiente' => '#fff3cd',
-                                'Observación' => '#d1ecf1',
-                                'En Proceso' => '#ffeaa7',
-                                'Completado' => '#d4edda'
-                            } }};
-                            color: {{ match($task->Tar_estado) {
-                                'Pendiente' => '#856404',
-                                'Observación' => '#0c5460',
-                                'En Proceso' => '#d68910',
-                                'Completado' => '#155724'
-                            } }};
-                        ">
-                            {{ $task->Tar_estado }}
-                        </span>
-                    </div>
+                    {{-- Estado --}}
+                    <span style="
+                        padding: 5px 12px;
+                        border-radius: 20px;
+                        font-size: 0.8em;
+                        font-weight: bold;
+                        background: {{ $colores[$estado]['bg'] ?? '#f1f5f9' }};
+                        color: {{ $colores[$estado]['text'] ?? '#475569' }};
+                    ">
+                        {{ $estado }}
+                    </span>
                 </div>
 
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                <hr style="margin: 15px 0;">
 
-                {{-- Acciones según estado --}}
-                @if($task->Tar_estado == 'Pendiente')
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                        <form action="{{ route('volunteer.tasks.updateStatus', $task->Tar_id) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="Tar_estado" value="Observación">
-                            <button type="submit" style="background: #17a2b8; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">Marcar en Observación</button>
-                        </form>
+                {{-- ACCIONES --}}
+                @if($estado !== 'Completada')
 
-                        <form action="{{ route('volunteer.tasks.updateStatus', $task->Tar_id) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="Tar_estado" value="En Proceso">
-                            <button type="submit" style="background: #fd7e14; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">Marcar en Proceso</button>
-                        </form>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
 
-                        <form action="{{ route('volunteer.tasks.complete', $task->Tar_id) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="comentario" value="">
-                            <button type="submit" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">Marcar como Completado</button>
-                        </form>
-                    </div>
-
-                    {{-- Comentario opcional --}}
-                    <div style="margin-bottom: 10px;">
-                        <form action="{{ route('volunteer.tasks.complete', $task->Tar_id) }}" method="POST">
-                            @csrf
-                            <label style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #555;">Comentario de cumplimiento (opcional):</label>
-                            <div style="display: flex; gap: 10px;">
-                                <textarea name="comentario" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; resize: vertical;" rows="2" placeholder="Describe lo que hiciste..."></textarea>
-                                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Enviar</button>
-                            </div>
-                        </form>
-                    </div>
-                @elseif($task->Tar_estado != 'Completado')
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        @if($task->Tar_estado == 'Observación')
-                            <form action="{{ route('volunteer.tasks.updateStatus', $task->Tar_id) }}" method="POST">
+                        {{-- Cambiar a Observación --}}
+                        @if($estado == 'Pendiente')
+                            <form action="{{ route($routePrefix . '.tasks.updateStatus', $task->Tar_id) }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="Tar_estado" value="En Proceso">
-                                <button type="submit" style="background: #fd7e14; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">Marcar en Proceso</button>
+                                @method('PATCH')
+                                <input type="hidden" name="Tar_estado" value="Observación">
+                                <button style="background:#17a2b8;color:#fff;padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">
+                                    Observación
+                                </button>
                             </form>
                         @endif
 
-                        <form action="{{ route('volunteer.tasks.complete', $task->Tar_id) }}" method="POST">
+                        {{-- Cambiar a En Proceso --}}
+                        @if($estado == 'Pendiente' || $estado == 'Observación')
+                            <form action="{{ route($routePrefix . '.tasks.updateStatus', $task->Tar_id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="Tar_estado" value="En Proceso">
+                                <button style="background:#fd7e14;color:#fff;padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">
+                                    En Proceso
+                                </button>
+                            </form>
+                        @endif
+
+                        {{-- Completar --}}
+                        <form action="{{ route($routePrefix . '.tasks.complete', $task->Tar_id) }}" method="POST">
                             @csrf
-                            <input type="hidden" name="comentario" value="">
-                            <button type="submit" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">Marcar como Completado</button>
+                            <button style="background:#28a745;color:#fff;padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">
+                                Completar
+                            </button>
                         </form>
                     </div>
-                @elseif($task->Tar_comentario)
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eef0f2;">
-                        <p style="margin: 0; font-size: 0.9em; color: #666;"><strong>Tu comentario:</strong> {{ $task->Tar_comentario }}</p>
-                    </div>
+
+                    {{-- Comentario --}}
+                    <form action="{{ route($routePrefix . '.tasks.complete', $task->Tar_id) }}" method="POST">
+                        @csrf
+                        <label style="font-size:0.9em;">Comentario (opcional)</label>
+                        <div style="display:flex; gap:10px;">
+                            <textarea name="comentario" rows="2" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">{{ $task->Tar_comentario }}</textarea>
+                            <button style="background:#28a745;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">
+                                Enviar
+                            </button>
+                        </div>
+                    </form>
+
+                @else
+                    {{-- Comentario final --}}
+                    @if($task->Tar_comentario)
+                        <div style="background:#f8f9fa;padding:15px;border-radius:8px;">
+                            <strong>Comentario:</strong> {{ $task->Tar_comentario }}
+                        </div>
+                    @endif
                 @endif
+
             </div>
+
         @empty
-            {{-- Mensaje si no hay tareas --}}
-            <div style="text-align: center; padding: 40px; background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <p style="font-size: 1.2em; color: #666;">No tienes tareas asignadas por el momento. ¡Buen trabajo! 🐾</p>
+            <div style="text-align:center;padding:40px;">
+                <p>No tienes tareas asignadas 🐾</p>
             </div>
         @endforelse
 
-        {{-- Botón volver --}}
-        <a href="{{ url()->previous() }}" class="btn-volver" style="display:inline-block; margin-top:20px; color:#fff; background:#6c757d; padding:10px 20px; border-radius:6px; text-decoration:none;">← Volver</a>
+        <a href="{{ route('dashboard') }}" style="display:inline-block;margin-top:20px;background:#6c757d;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">
+            ← Volver
+        </a>
+
     </div>
 </div>
 @endsection

@@ -4,6 +4,7 @@
 
 @section('content')
 <div style="max-width: 1400px; margin: 30px auto; padding: 20px;">
+    <a href="{{ route('dashboard') }}" style="display: inline-block; margin-bottom: 20px; background: #f1f5f9; color: #475569; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">← Volver al Inicio</a>
     <h2>Solicitudes de Adopción Recibidas</h2>
     
     @if(session('success'))

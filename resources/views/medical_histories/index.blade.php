@@ -3,7 +3,9 @@
 @section('title', 'Historial Médico | SDAANIM')
 
 @section('content')
-<div style="max-width: 1000px; margin: 30px auto; padding: 20px;">
+<div style="max-width: 1000px; margin: 30px auto; padding: 20px; position: relative;">
+    <a href="{{ route('vet.animals') }}" style="display: inline-block; margin-bottom: 20px; background: #f1f5f9; color: #475569; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">← Volver a Animales</a>
+
     <div class="premium-card" style="display: flex; align-items: center; gap: 20px; margin-bottom: 40px; border-top: 8px solid #20B2AA;">
         <img src="{{ asset('img/' . ($animal->Anim_foto ?? 'placeholder.jpg')) }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #f1f5f9;">
         <div>
@@ -74,7 +76,12 @@
                     </p>
                 @endif
             </div>
-        @forelse
+        @empty
+            <div style="background: #f8fafc; padding: 30px; border-radius: 15px; text-align: center; border: 2px dashed #cbd5e1;">
+                <p style="font-size: 1.2em; color: #64748b; margin: 0;">🏥 Este animal aún no tiene historial médico registrado.</p>
+                <p style="color: #94a3b8; font-size: 0.9em; margin-top: 5px;">Usa el formulario superior para agregar su primera intervención.</p>
+            </div>
+        @endforelse
     </div>
 </div>
 @endsection

@@ -4,6 +4,7 @@
 
 @section('content')
 <div style="max-width: 1100px; margin: 30px auto; padding: 20px;">
+    <a href="{{ route('dashboard') }}" style="display: inline-block; margin-bottom: 20px; background: #f1f5f9; color: #475569; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">← Volver al Inicio</a>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h2>Animales en el Refugio</h2>
         <a href="{{ route('admin.animals.create') }}" style="background: #2e8b57; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none;">+ Agregar Animal</a>
