@@ -78,7 +78,8 @@ class AdoptionController extends Controller
         $solicitud = AdoptionRequest::findOrFail($id);
         
         $data = $request->validate([
-            'estado' => 'required|in:Aprobada,Rechazada,Pendiente,En Proceso',
+
+        'estado' => 'required|in:Pendiente,Asignada,En Entrevista,Aprobada,No Apta,Proceso Adopcion,Rechazada,En Proceso',
             'voluntario_doc' => 'nullable|exists:users,Usu_documento'
         ]);
 
