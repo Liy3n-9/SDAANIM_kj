@@ -6,28 +6,20 @@
 
 <div class="admin-sections">
 
-    {{-- Voluntarios --}}
-    <div class="admin-card">
-        <div class="icon">🤝</div>
-        <h3>Voluntarios</h3>
-        <p>Gestiona los voluntarios postulados y asigna sus roles dentro del sistema.</p>
-        <a href="{{ route('admin.users.index') }}">Gestionar Usuarios</a>
-    </div>
-
     {{-- Gestionar Usuarios --}}
     <div class="admin-card">
-        <div class="icon">🤝</div>
+        <div class="icon">👥</div>
         <h3>Gestionar Usuarios</h3>
-        <p>Gestiona los usuarios postulados y asigna sus roles dentro del sistema.</p>
+        <p>Administra los roles y estados de los usuarios registrados en el sistema.</p>
         <a href="{{ route('admin.users.index') }}">Gestionar Usuarios</a>
     </div>
 
-    {{-- Veterinarios --}}
+    {{-- Tareas --}}
     <div class="admin-card">
-        <div class="icon">⚕️</div>
-        <h3>Veterinarios</h3>
-        <p>Agenda citas, revisa solicitudes y coordina las atenciones médicas de las mascotas.</p>
-        <a href="#">Agendar Citas</a>
+        <div class="icon">📝</div>
+        <h3>Tareas</h3>
+        <p>Crea y asigna tareas a voluntarios y veterinarios según su disponibilidad.</p>
+        <a href="{{ route('admin.tasks.index') }}">Gestionar Tareas</a>
     </div>
 
     {{-- Adopciones --}}
@@ -50,7 +42,7 @@
     <div class="admin-card">
         <div class="icon">📊</div>
         <h3>Inscripciones</h3>
-        <p>Revisa las inscripciones a eventos y postulaciones del refugio.</p>
+        <p>Revisa las inscripciones de voluntarios y veterinarios postulados.</p>
         <a href="{{ route('admin.inscriptions.index') }}">Ver Inscripciones</a>
     </div>
 
