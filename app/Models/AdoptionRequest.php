@@ -23,4 +23,9 @@ class AdoptionRequest extends Model
     {
         return $this->hasMany(AdoptionFollowup::class, 'Soli_id', 'Soli_id');
     }
+
+    public function volunteer()
+    {
+        return $this->belongsTo(User::class, 'Soli_voluntario', 'Usu_documento');
+    }
 }

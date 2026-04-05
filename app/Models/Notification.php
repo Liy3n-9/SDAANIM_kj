@@ -8,4 +8,8 @@ class Notification extends Model
 {
     protected $primaryKey = 'Noto_id';
     protected $fillable = ['Usu_documento', 'Noti_mensaje', 'Noti_fecha', 'Noti_link', 'read_at'];
+
+    protected $casts = [
+        'Noti_fecha' => 'date',
+    ];
 }
