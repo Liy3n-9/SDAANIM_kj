@@ -36,10 +36,16 @@
         <a href="{{ route('vet.availability') }}">Gestionar Horario</a>
     </div>
     <div class="admin-card">
-        <div class="icon">🩺</div>
-        <h3>Consultas Programadas</h3>
-        <p>Mantén el control de tus citas y revisiones médicas para los peluditos.</p>
-        <a href="#">Calendario Médico</a>
+        <div class="icon">📝</div>
+        <h3>Mis Tareas</h3>
+        <p>Revisa las tareas asignadas por el administrador y regístralas como completadas.</p>
+        <a href="{{ route('vet.tasks') }}">Ver Tareas</a>
+    </div>
+    <div class="admin-card">
+        <div class="icon">🔔</div>
+        <h3>Notificaciones</h3>
+        <p>Mantente informado sobre todas tus actividades y cambios asignados.</p>
+        <a href="{{ route('notifications') }}">Ver Notificaciones</a>
     </div>
 </section>
 @endsection
