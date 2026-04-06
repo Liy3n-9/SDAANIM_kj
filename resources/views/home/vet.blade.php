@@ -47,5 +47,11 @@
         <p>Mantente informado sobre todas tus actividades y cambios asignados.</p>
         <a href="{{ route('notifications') }}">Ver Notificaciones</a>
     </div>
+    <div class="admin-card" style="border-top: 5px solid #ffa500;">
+        <div class="icon">📈</div>
+        <h3>Mi Progreso</h3>
+        <p>Consulta el historial y avance visual de tus labores clínicas.</p>
+        <a href="{{ route('vet.progress') }}" style="background: #ffa500; box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);">Ver Mi Progreso</a>
+    </div>
 </section>
 @endsection

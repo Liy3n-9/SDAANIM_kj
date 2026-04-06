@@ -54,6 +54,14 @@
         <a href="{{ route('admin.requests.index') }}">Ver Solicitudes</a>
     </div>
 
+    {{-- Progreso de Actividades (NUEVO) --}}
+    <div class="admin-card" style="border-top: 4px solid #f59e0b;">
+        <div class="icon">📈</div>
+        <h3>Progreso de Actividades</h3>
+        <p>Supervisa el avance real, fases y comentarios de las tareas de voluntarios.</p>
+        <a href="{{ route('admin.activities') }}" style="background: linear-gradient(90deg, #f59e0b, #d97706);">Ver Progreso</a>
+    </div>
+
 </div>
 
 <style>

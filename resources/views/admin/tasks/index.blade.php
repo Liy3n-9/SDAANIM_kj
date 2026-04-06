@@ -115,6 +115,8 @@
     </div>
     @endif
 
+
+
     {{-- TABLA DE TAREAS EXISTENTES --}}
     <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
         <h3 style="margin-top: 0; color: #1e293b;">📋 Tareas Existentes</h3>
@@ -144,7 +146,7 @@
                                         'Pendiente' => ['bg' => '#fff3cd', 'text' => '#856404'],
                                         'Observación' => ['bg' => '#d1ecf1', 'text' => '#0c5460'],
                                         'En Proceso' => ['bg' => '#ffeaa7', 'text' => '#d68910'],
-                                        'Completada' => ['bg' => '#d4edda', 'text' => '#155724'],
+                                        'Completado' => ['bg' => '#d4edda', 'text' => '#155724'],
                                     ];
                                     $c = $estadoColors[$task->Tar_estado] ?? ['bg' => '#f1f5f9', 'text' => '#475569'];
                                 @endphp

@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
             return view('home.volunteer');
         })->name('dashboard');
         Route::get('/tareas', [TaskController::class, 'index'])->name('tasks');
+        Route::get('/progreso', [TaskController::class, 'volunteerProgress'])->name('progress');
 
         // Actualizar estado de la tarea
         Route::patch('/tareas/{id}/estado', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
@@ -107,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Vet tasks (tareas asignadas por el admin)
         Route::get('/tareas', [TaskController::class, 'index'])->name('tasks');
+        Route::get('/progreso', [TaskController::class, 'volunteerProgress'])->name('progress');
         Route::patch('/tareas/{id}/estado', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
         Route::post('/tareas/{id}/completar', [TaskController::class, 'complete'])->name('tasks.complete');
         Route::post('/tareas/{id}/comentar', [TaskController::class, 'updateComment'])->name('tasks.updateComment');
@@ -133,6 +135,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tareas', [TaskController::class, 'adminIndex'])->name('tasks.index');
         Route::post('/tareas', [TaskController::class, 'store'])->name('tasks.store');
         Route::post('/tareas/{task}/assign-volunteer', [TaskController::class, 'assignVolunteer'])->name('tasks.assignVolunteer');
+        Route::get('/actividades', [TaskController::class, 'adminActivities'])->name('activities');
 
         // Inscriptions (Vet/Volunteer requests)
         Route::get('/inscripciones', [InscriptionController::class, 'adminIndex'])->name('inscriptions.index');
@@ -144,6 +147,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Notificaciones (para todos los roles, mostrando solo las del usuario actual)
+    Route::post('/notificaciones/leer', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notificaciones.leer');
     Route::get('/notifications', function () {
         $notifications = \App\Models\Notification::where('Usu_documento', Auth::user()->Usu_documento)
             ->latest('Noti_fecha')

@@ -78,7 +78,7 @@
         <div class="icon">�📊</div>
         <h3>Mi Progreso</h3>
         <p>Consulta las actividades que has realizado recientemente.</p>
-        <a href="{{ route('volunteer.tasks') }}">Ver Historial</a>
+        <a href="{{ route('volunteer.progress') }}">Ver Mi Progreso</a>
     </div>
 </section>
 @endsection

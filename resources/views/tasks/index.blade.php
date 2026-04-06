@@ -30,7 +30,7 @@
                     'Pendiente' => ['bg' => '#fff3cd', 'text' => '#856404', 'border' => '#ffc107'],
                     'Observación' => ['bg' => '#d1ecf1', 'text' => '#0c5460', 'border' => '#17a2b8'],
                     'En Proceso' => ['bg' => '#ffeaa7', 'text' => '#d68910', 'border' => '#fd7e14'],
-                    'Completada' => ['bg' => '#d4edda', 'text' => '#155724', 'border' => '#28a745'],
+                    'Completado' => ['bg' => '#d4edda', 'text' => '#155724', 'border' => '#28a745'],
                 ];
             @endphp
 
@@ -75,7 +75,7 @@
                 <hr style="margin: 15px 0;">
 
                 {{-- ACCIONES --}}
-                @if($estado !== 'Completada')
+                @if($estado !== 'Completado')
 
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
 
@@ -137,8 +137,11 @@
             </div>
 
         @empty
-            <div style="text-align:center;padding:40px;">
-                <p>No tienes tareas asignadas 🐾</p>
+            <div style="text-align:center;padding:40px; background: white; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #6c757d;">
+                <span style="font-size: 3em;">✨</span>
+                <h3 style="color: #64748b;">No tienes tareas pendientes</h3>
+                <p>Excelente trabajo. Si quieres ver tus labores anteriores, visita tu sección de progreso.</p>
+                <a href="{{ route(Auth::user()->role == 'Veterinario' ? 'vet.progress' : 'volunteer.progress') }}" style="display:inline-block; margin-top:10px; background:#0ea5e9; color:white; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;">📈 Ver Mi Progreso</a>
             </div>
         @endforelse
 

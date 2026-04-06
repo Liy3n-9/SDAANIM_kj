@@ -17,10 +17,25 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::where('Usu_documento', Auth::user()->Usu_documento)
+            ->where('Tar_estado', '!=', 'Completado') // Solo pendientes en la vista de gestión
             ->latest()
             ->get();
 
         return view('tasks.index', compact('tasks'));
+    }
+
+    /**
+     * VISTA DE PROGRESO (Dashboard visual para el voluntario/vet)
+     */
+    public function volunteerProgress()
+    {
+        $allTasks = Task::where('Usu_documento', Auth::user()->Usu_documento)->get();
+        
+        $completedCount = $allTasks->where('Tar_estado', 'Completado')->count();
+        $pendingCount = $allTasks->where('Tar_estado', '!=', 'Completado')->count();
+        $totalCount = $allTasks->count();
+
+        return view('tasks.progress', compact('allTasks', 'completedCount', 'pendingCount', 'totalCount'));
     }
 
     /**
@@ -35,7 +50,7 @@ class TaskController extends Controller
         }
 
         $task->update([
-            'Tar_estado' => 'Completada',
+            'Tar_estado' => 'Completado',
             'Tar_comentario' => $request->get('comentario'),
         ]);
 
@@ -68,7 +83,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
 
         $request->validate([
-            'Tar_estado' => 'required|in:Pendiente,Observación,En Proceso,Completada',
+            'Tar_estado' => 'required|in:Pendiente,Observación,En Proceso,Completado',
         ]);
 
         $task->update(['Tar_estado' => $request->Tar_estado]);
@@ -79,9 +94,19 @@ class TaskController extends Controller
     /**
      * LISTAR todas las tareas para el ADMIN, con voluntarios y veterinarios
      */
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        $tasks = Task::with('user')->latest()->get();
+        $query = Task::with('user')->latest();
+
+        if ($request->filled('volunteer_id')) {
+            $query->where('Usu_documento', $request->volunteer_id);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('Tar_estado', $request->status);
+        }
+
+        $tasks = $query->get();
 
         // Traer voluntarios Y veterinarios (con case correcto)
         $volunteers = User::whereIn('role', ['Voluntario', 'Veterinario'])->get();
@@ -95,6 +120,41 @@ class TaskController extends Controller
             ->groupBy('Usu_documento');
 
         return view('admin.tasks.index', compact('tasks', 'volunteers', 'availabilities'));
+    }
+
+    /**
+     * PANTALLA EXCLUSIVA DE ACTIVIDADES Filtradas (Voluntarios)
+     */
+    public function adminActivities(Request $request)
+    {
+        $query = Task::with('user')->latest();
+
+        // 1. Filtrar por Rol (Voluntario o Veterinario)
+        if ($request->filled('role')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('role', $request->role);
+            });
+        } else {
+            $query->whereHas('user', function($q) {
+                $q->whereIn('role', ['Voluntario', 'Veterinario']);
+            });
+        }
+
+        // 2. Filtrar por Usuario (volunteer_id)
+        if ($request->filled('volunteer_id')) {
+            $query->where('Usu_documento', $request->volunteer_id);
+        }
+
+        // 3. Filtrar por Fase/Estado
+        if ($request->filled('status')) {
+            $query->where('Tar_estado', $request->status);
+        }
+
+        $activities = $query->get();
+        // Todos los posibles asignados para los dropdowns
+        $assignees = User::whereIn('role', ['Voluntario', 'Veterinario'])->get();
+
+        return view('admin.activities.index', compact('activities', 'assignees'));
     }
 
     /**

@@ -22,11 +22,13 @@
                         </span>
                     </p>
                 </div>
-                <a href="{{ route('animal.show', $request->Anim_id) }}" style="text-decoration: none; color: #007bff; font-weight: bold;">Ver Animal</a>
+                <a href="javascript:void(0);" onclick="abrirModal('{{ $request->animal->Anim_nombre }}', '{{ $request->animal->Anim_edad }}', '{{ $request->animal->Anim_raza }}', '{{ $request->animal->Anim_historia ?? 'Sin historia disponible' }}', '{{ asset('img/' . ($request->animal->Anim_foto ?? 'placeholder.jpg')) }}')" style="text-decoration: none; color: #007bff; font-weight: bold;">Ver Detalles</a>
             </div>
         @empty
             <p>Aún no has enviado ninguna solicitud 🐾</p>
         @endforelse
     </div>
 </div>
+
+@include('partials.animal_modal')
 @endsection
