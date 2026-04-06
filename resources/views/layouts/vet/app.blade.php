@@ -35,13 +35,17 @@
             <img src="{{ asset('img/a.png') }}" alt="Logo" style="height: 45px;">
             <h2 class="logo-text">Bienestar Animal Vet</h2>
         </div>
-        <div>
-            <button class="notif-toggle" onclick="toggleSidebar()">🔔 Notificaciones</button>
-            <span style="margin-left:15px; font-weight:bold;">{{ Auth::user()->name }}</span>
-            <form action="{{ route('logout') }}" method="POST" style="display:inline; margin-left:10px;">
-                @csrf
-                <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer;">Cerrar sesión</button>
-            </form>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            @php
+                $notifCount = \App\Models\Notification::where('Usu_documento', Auth::user()->Usu_documento)->whereNull('read_at')->count();
+            @endphp
+            <div style="position: relative; display: inline-block;">
+                <button type="button" class="notif-toggle" onclick="toggleSidebar()" style="background: none; border: none; font-size: 1.4em; cursor: pointer; padding: 0;">🔔</button>
+                @if($notifCount > 0)
+                    <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7em; font-weight: bold;">{{ $notifCount }}</span>
+                @endif
+            </div>
+            <span style="font-weight:bold;">{{ Auth::user()->name }}</span>
         </div>
     </header>
 
@@ -64,6 +68,15 @@
         <a href="{{ route('vet.dashboard') }}">🏠 Dashboard</a>
         <a href="{{ route('vet.animals') }}">🏥 Ver Animales</a>
         <a href="{{ route('profile.edit') }}">📊 Mi Perfil</a>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <a href="#" style="color: #666; font-weight: bold;">❓ Ayuda y Soporte</a>
+        <form action="{{ route('logout') }}" method="POST" style="margin: 0; padding: 0;">
+            @csrf
+            <button type="submit" style="width: 100%; text-align: left; padding: 12px; background: transparent; border: none; cursor: pointer; color: #d9534f; font-size: 0.9em; border-radius: 5px; font-family: inherit; transition: 0.3s;" onmouseover="this.style.backgroundColor='#ffe6e6'" onmouseout="this.style.backgroundColor='transparent'">
+                🚪 Cerrar sesión
+            </button>
+        </form>
     </div>
 
     <main>
@@ -96,7 +109,24 @@
 
     <script>
         function toggleSidebar() {
-            document.getElementById("notifSidebar").classList.toggle("active");
+            const sidebar = document.getElementById("notifSidebar");
+            sidebar.classList.toggle("active");
+            if (sidebar.classList.contains("active")) {
+                const badge = document.getElementById("notifBadge");
+                if (badge) {
+                    fetch('{{ route("notificaciones.leer") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    }).then(response => {
+                        if(response.ok) {
+                            badge.style.display = 'none';
+                        }
+                    }).catch(error => console.error('Error:', error));
+                }
+            }
         }
     </script>
 </body>
