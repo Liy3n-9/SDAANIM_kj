@@ -71,7 +71,7 @@ main {
 }
 
 footer {
-    background: #007acc;
+    background: var(--footer-bg, #007acc);
     color: white;
     text-align: center;
     padding: 15px 0;

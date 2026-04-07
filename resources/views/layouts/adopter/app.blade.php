@@ -10,57 +10,6 @@
     <link rel="stylesheet" href="{{ asset('css/adopter/dashboard.css') }}">
     @yield('styles')
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .notif-sidebar {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100%;
-            background: #fff;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-            transition: right 0.4s ease;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .notif-sidebar.active {
-            right: 0;
-        }
-
-        .notif-sidebar h3 {
-            text-align: center;
-            color: #2d7d46;
-            margin-bottom: 20px;
-        }
-
-        .notif-sidebar a {
-            display: block;
-            padding: 12px;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            border-radius: 5px;
-        }
-
-        .notif-sidebar a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #2d7d46;
-        }
 </head>
 
 <body>

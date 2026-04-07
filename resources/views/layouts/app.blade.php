@@ -8,74 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/shared/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/shared/layout.css') }}">
-    <style>
-            color: white;
-            padding: 12px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .admin-header .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .admin-header img {
-            height: 45px;
-        }
-
-        .admin-header h2 {
-            font-family: 'Pacifico', cursive;
-            font-size: 1.8em;
-            margin: 0;
-            color: white;
-        }
-
-        .auth-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .auth-info span {
-            font-weight: bold;
-        }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: 0.3s;
-            padding: 0;
-            font-size: 1rem;
-        }
-
-        .logout-btn:hover {
-            border-bottom: 2px solid white;
-        }
-
-        main {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 80vh;
-        }
-
-        footer {
-            background: @yield('footer-bg', '#007acc');
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 40px;
-            font-size: 0.9em;
-        }
-    </style>
     @yield('styles')
 </head>
 
@@ -102,7 +34,7 @@
         @yield('content')
     </main>
 
-    <footer>
+    <footer style="--footer-bg: @yield('footer-bg', '#007acc');">
         <p>© 2025 Esperanza Animal BQ | @yield('footer-text', 'SDAANIM')</p>
     </footer>
 </body>

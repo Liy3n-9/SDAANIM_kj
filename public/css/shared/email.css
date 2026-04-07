@@ -62,6 +62,54 @@ body {
     font-size: 14px;
 }
 
+.info-box-rejected {
+    background-color: #fff3e0;
+    border-left: 4px solid #d35400;
+}
+
+.info-box-rejected h3 {
+    color: #bf360c;
+}
+
+.message-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border: 1px solid #e0e0e0;
+}
+
+.message-section h3 {
+    color: #d35400;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.message-text {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.encouragement {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #1565c0;
+    line-height: 1.6;
+}
+
+.contact-info {
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
 .credentials {
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
