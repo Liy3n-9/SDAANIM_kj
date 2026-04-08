@@ -160,6 +160,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/solicitudes', [AdoptionController::class, 'adminIndex'])->name('requests.index');
         Route::post('/solicitudes/{id}/approve', [AdoptionController::class, 'approve'])->name('requests.approve');
         Route::post('/solicitudes/{id}/assign-volunteer', [AdoptionController::class, 'assignVolunteer'])->name('requests.assignVolunteer');
+        Route::post('/solicitudes/{id}/submit-report', [AdoptionController::class, 'submitReport'])->name('requests.submitReport');
+        Route::post('/solicitudes/{id}/decide', [AdoptionController::class, 'decide'])->name('requests.decide');
         Route::get('/usuarios', [ProfileController::class, 'adminIndex'])->name('users.index');
 
         // Admin Task management

@@ -106,16 +106,80 @@
                         {{-- Completar --}}
                     </div>
 
-                    <form action="{{ route($routePrefix . '.tasks.complete', $task->Tar_id) }}" method="POST" style="width: 100%; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                        @csrf
-                        <label style="font-size:0.9em; font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Completar Tarea (Observaciones)</label>
-                        <div style="display:flex; gap:10px; flex-direction: column;">
-                            <textarea name="comentario" rows="2" placeholder="Describe lo que observaste o realizaste (opcional)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">{{ $task->Tar_comentario }}</textarea>
-                            <button style="background:#28a745;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer; align-self: flex-start; font-weight: bold;">
-                                ✓ Completar Tarea
-                            </button>
-                        </div>
-                    </form>
+                    {{-- Información del adoptante para adopciones --}}
+                    @if($task->soli_id || str_contains(strtolower($task->Tar_descripcion), 'seguimiento') || str_contains(strtolower($task->Tar_descripcion), 'adopción') || str_contains(strtolower($task->Tar_descripcion), 'visita'))
+                        @php
+                            if ($task->soli_id) {
+                                $adoptionRequest = \App\Models\AdoptionRequest::with('user', 'animal')->find($task->soli_id);
+                            } else {
+                                $adoptionRequest = \App\Models\AdoptionRequest::where('Soli_voluntario', Auth::user()->Usu_documento)
+                                    ->where('Soli_estado', 'En Revisión')
+                                    ->with('user', 'animal')
+                                    ->first();
+                            }
+                        @endphp
+                        @if($adoptionRequest)
+                            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #0ea5e9;">
+                                <h4 style="margin: 0 0 10px 0; color: #0ea5e9;">📋 Información del Adoptante</h4>
+                                <p><strong>Nombre:</strong> {{ $adoptionRequest->user->name }}</p>
+                                <p><strong>Teléfono:</strong> {{ $adoptionRequest->user->Usu_telefono ?? 'No especificado' }}</p>
+                                <p><strong>Dirección:</strong> {{ $adoptionRequest->user->Usu_direccion ?? 'No especificada' }}</p>
+                                <p><strong>Animal solicitado:</strong> {{ $adoptionRequest->animal->Anim_nombre }}</p>
+                                <p><strong>Motivo:</strong> {{ $adoptionRequest->Soli_motivo }}</p>
+                                <p><strong>Otras mascotas:</strong> {{ $adoptionRequest->Soli_otras_mascotas ?? 'Ninguna' }}</p>
+                                <p><strong>Tipo de vivienda:</strong> {{ $adoptionRequest->Soli_tipo_vivienda }}</p>
+                                <p><strong>Tiempo disponible:</strong> {{ $adoptionRequest->Soli_tiempo_disponible }}</p>
+                                @if($adoptionRequest->Soli_comentarios)
+                                    <p><strong>Comentarios adicionales:</strong> {{ $adoptionRequest->Soli_comentarios }}</p>
+                                @endif
+                            </div>
+                        @endif
+                    @endif
+
+                    {{-- Formulario especial para adopciones --}}
+                    @if(str_contains(strtolower($task->Tar_descripcion), 'seguimiento') || str_contains(strtolower($task->Tar_descripcion), 'adopción') || str_contains(strtolower($task->Tar_descripcion), 'visita'))
+                        @php
+                            $adoptionRequest = \App\Models\AdoptionRequest::where('Soli_voluntario', Auth::user()->Usu_documento)
+                                ->where('Soli_estado', 'En Revisión')
+                                ->first();
+                        @endphp
+                        @if($adoptionRequest && !$adoptionRequest->reporte_voluntario)
+                            <form action="{{ route('admin.requests.submitReport', $adoptionRequest->Soli_id) }}" method="POST" style="width: 100%; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                @csrf
+                                <label style="font-size:0.9em; font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Reporte de Visita de Adopción</label>
+                                <textarea name="reporte" rows="4" placeholder="Describe lo que observaste en el hogar del adoptante, condiciones, etc." required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom: 10px;"></textarea>
+                                <div style="margin-bottom: 10px;">
+                                    <label><input type="radio" name="apto" value="1" required> Apto para adopción</label>
+                                    <label style="margin-left: 20px;"><input type="radio" name="apto" value="0" required> No apto para adopción</label>
+                                </div>
+                                <button style="background:#28a745;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer; font-weight: bold;">
+                                    ✓ Enviar Reporte
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route($routePrefix . '.tasks.complete', $task->Tar_id) }}" method="POST" style="width: 100%; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                @csrf
+                                <label style="font-size:0.9em; font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Completar Tarea (Observaciones)</label>
+                                <div style="display:flex; gap:10px; flex-direction: column;">
+                                    <textarea name="comentario" rows="2" placeholder="Describe lo que observaste o realizaste (opcional)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">{{ $task->Tar_comentario }}</textarea>
+                                    <button style="background:#28a745;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer; align-self: flex-start; font-weight: bold;">
+                                        ✓ Completar Tarea
+                                    </button>
+                                </div>
+                            </form>
+                        @endif
+                    @else
+                        <form action="{{ route($routePrefix . '.tasks.complete', $task->Tar_id) }}" method="POST" style="width: 100%; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            @csrf
+                            <label style="font-size:0.9em; font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Completar Tarea (Observaciones)</label>
+                            <div style="display:flex; gap:10px; flex-direction: column;">
+                                <textarea name="comentario" rows="2" placeholder="Describe lo que observaste o realizaste (opcional)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">{{ $task->Tar_comentario }}</textarea>
+                                <button style="background:#28a745;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer; align-self: flex-start; font-weight: bold;">
+                                    ✓ Completar Tarea
+                                </button>
+                            </div>
+                        </form>
+                    @endif
 
                 @else
                     {{-- Editar Comentario --}}

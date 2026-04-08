@@ -11,7 +11,7 @@ class Task extends Model
     protected $fillable = [
         'Usu_documento', 'Tar_titulo', 'Tar_descripcion',
         'Tar_fecha_asignacion', 'Tar_fecha_limite',
-        'Tar_estado', 'Tar_comentario', 'Tar_hora', 'Tar_base'
+        'Tar_estado', 'Tar_comentario', 'Tar_hora', 'Tar_base', 'soli_id'
     ];
 
     // Cast de fechas a Carbon
