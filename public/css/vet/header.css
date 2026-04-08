@@ -1,0 +1,110 @@
+.vet-header {
+    background: linear-gradient(135deg, #1C9F96, #20B2AA);
+    padding: 15px 40px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.8em;
+    color: white !important;
+    margin: 0;
+}
+
+.notif-toggle {
+    background-color: white;
+    color: #20B2AA;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.notif-sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.4s ease;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.notif-sidebar.active {
+    right: 0;
+}
+
+.notif-sidebar h3 {
+    text-align: center;
+    color: #20B2AA;
+    margin-bottom: 20px;
+}
+
+.notif-sidebar a {
+    display: block;
+    padding: 12px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.notif-sidebar a:hover {
+    background-color: #e0fff9;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #20B2AA;
+}
+
+.sidebar-vet {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border-right: 5px solid #20B2AA;
+}
+
+.sidebar-vet a {
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+    color: #444;
+}
+
+.sidebar-vet a:hover {
+    background: #e0fff9;
+    color: #1C9F96;
+    transform: translateX(8px);
+}
+
+main {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+footer {
+    background: #20B2AA;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 40px;
+    font-size: 0.9em;
+}

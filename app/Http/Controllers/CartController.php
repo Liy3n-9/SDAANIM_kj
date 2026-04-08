@@ -53,7 +53,11 @@ class CartController extends Controller
     public function remove($cart_id)
     {
         $cartItem = CartItem::findOrFail($cart_id);
-        $this->authorize('delete', $cartItem);
+
+        if ((string) $cartItem->Usu_documento !== (string) Auth::user()->Usu_documento) {
+            abort(403);
+        }
+
         $cartItem->delete();
         
         return back()->with('success', 'Producto removido del carrito');
@@ -62,7 +66,10 @@ class CartController extends Controller
     public function updateQuantity(Request $request, $cart_id)
     {
         $cartItem = CartItem::findOrFail($cart_id);
-        $this->authorize('update', $cartItem);
+
+        if ((string) $cartItem->Usu_documento !== (string) Auth::user()->Usu_documento) {
+            abort(403);
+        }
         
         $cantidad = $request->input('cantidad');
         if ($cantidad <= 0 || $cantidad > $cartItem->product->prod_cantidad) {

@@ -24,7 +24,7 @@
         <tbody>
             @foreach($products as $product)
                 <tr style="border-bottom: 1px solid #eee; text-align: center;">
-                    <td style="padding: 12px;"><img src="{{ asset('img/products/' . ($product->prod_imagen ?? 'default.jpg')) }}" style="width: 50px; height: 50px; object-fit: contain;"></td>
+                    <td style="padding: 12px;"><img src="{{ asset('img/' . ($product->prod_imagen ?? 'default.jpg')) }}" style="width: 50px; height: 50px; object-fit: contain;"></td>
                     <td style="padding: 12px;">{{ $product->prod_nombre }}</td>
                     <td style="padding: 12px;">{{ $product->prod_categoria }}</td>
                     <td style="padding: 12px;">${{ number_format($product->prod_precio, 0) }}</td>

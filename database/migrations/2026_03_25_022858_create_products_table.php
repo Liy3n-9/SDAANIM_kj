@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('prod_id');
             $table->string('prod_nombre', 100);
             $table->text('prod_descripcion')->nullable();
-            $table->enum('prod_categoria', ['Alimentos', 'Juguetes', 'Camas', 'Accesorios']);
+            $table->enum('prod_categoria', ['Alimentos', 'Juguetes', 'Camas', 'Accesorios', 'Ropa']);
             $table->decimal('prod_precio', 10, 2);
             $table->integer('prod_cantidad')->default(0);
             $table->string('prod_imagen', 255)->nullable();

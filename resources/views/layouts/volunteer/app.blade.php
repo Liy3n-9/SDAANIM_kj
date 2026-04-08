@@ -9,137 +9,6 @@
     <link rel="stylesheet" href="{{ asset('css/shared/premium.css') }}">
     <link rel="stylesheet" href="{{ asset('css/volunteer/dashboard.css') }}">
     @yield('styles')
-            margin: 0;
-            font-family: 'Open Sans', sans-serif;
-            background: #f0f4f8;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        .vol-header {
-            background: linear-gradient(135deg, #005f9e, #007acc);
-            padding: 15px 40px;
-        }
-
-        .logo-text {
-            font-family: 'Pacifico', cursive;
-            font-size: 1.8em;
-            color: white !important;
-            margin: 0;
-        }
-
-        /* Botón de notificaciones */
-        .notif-toggle {
-            background-color: white;
-            color: #007acc;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        /* Sidebar de notificaciones */
-        .notif-sidebar {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100%;
-            background: #fff;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-            transition: right 0.4s ease;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .notif-sidebar.active {
-            right: 0;
-        }
-
-        .notif-sidebar h3 {
-            text-align: center;
-            color: #007acc;
-            margin-bottom: 20px;
-        }
-
-        .notif-sidebar a {
-            display: block;
-            padding: 12px;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            border-radius: 5px;
-        }
-
-        .notif-sidebar a:hover {
-            background-color: #e0f0ff;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #007acc;
-        }
-
-        /* Sidebar de voluntarios */
-        .sidebar-vol {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(15px);
-            border-right: 5px solid #007acc;
-        }
-
-        .sidebar-vol a {
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        .sidebar-vol a:hover {
-            background: #e6f2ff;
-            color: #007acc;
-            transform: translateX(8px);
-        }
-
-        /* Contenido principal */
-        main {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 80vh;
-        }
-
-        /* Pie de página */
-        footer {
-            background: #007acc;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        .vol-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #005f9e, #007acc);
-            padding: 15px 40px;
-        }
-
-        .vol-header > div:last-child {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
 </head>
 <body>
     <header class="vol-header admin-header">
@@ -157,17 +26,20 @@
                     <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7em; font-weight: bold;">{{ $notifCount }}</span>
                 @endif
             </div>
-            <span style="font-weight:bold;">{{ Auth::user()->name }}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="{{ Auth::user()->Usu_foto ? asset('img/profiles/' . Auth::user()->Usu_foto) : asset('img/usuario.png') }}" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                <span style="font-weight:bold;">{{ Auth::user()->name }}</span>
+            </div>
         </div>
     </header>
 
     <div id="notifSidebar" class="notif-sidebar sidebar-vol">
         <button class="close-btn" onclick="toggleSidebar()">✖</button>
         <h3>Centro de Avisos</h3>
-        <div style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+        <div style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;" id="notificationContainer">
             @auth
                 @forelse(\App\Models\Notification::where('Usu_documento', Auth::user()->Usu_documento)->latest()->take(5)->get() as $notification)
-                    <a href="{{ $notification->Noti_link ?? '#' }}" style="font-size: 0.9em; border-left: 3px solid #007acc; margin-bottom: 5px; background: #f0f7ff;">
+                    <a href="{{ $notification->Noti_link ?? '#' }}" data-notification-id="{{ $notification->Noto_id }}" class="notification-link" style="font-size: 0.9em; border-left: 3px solid #007acc; margin-bottom: 5px; background: #f0f7ff;">
                         {{ $notification->Noti_mensaje }}<br>
                         <small style="color: #999;">{{ \Carbon\Carbon::parse($notification->Noti_fecha)->diffForHumans() }}</small>
                     </a>
@@ -240,6 +112,54 @@
                 }
             }
         }
+
+        // Notification removal on click
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationLinks = document.querySelectorAll('.notification-link');
+            notificationLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const notificationId = this.getAttribute('data-notification-id');
+                    const href = this.getAttribute('href');
+                    const linkElement = this;
+                    
+                    // Delete from database
+                    fetch(`/notifications/${notificationId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => {
+                        if(response.ok) {
+                            // Remove from DOM with animation
+                            linkElement.style.opacity = '0';
+                            linkElement.style.transition = 'opacity 0.3s ease';
+                            setTimeout(() => {
+                                if (linkElement.parentElement) {
+                                    linkElement.remove();
+                                }
+                            }, 300);
+                            
+                            // Navigate to link if valid
+                            if (href && href !== '#') {
+                                setTimeout(() => {
+                                    window.location.href = href;
+                                }, 300);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al eliminar notificación:', error);
+                        // Still navigate even if delete fails
+                        if (href && href !== '#') {
+                            window.location.href = href;
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>

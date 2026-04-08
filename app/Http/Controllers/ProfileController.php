@@ -34,21 +34,30 @@ class ProfileController extends Controller
         $user = Auth::user();
         
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->Usu_documento . ',Usu_documento',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $user->Usu_documento . ',Usu_documento',
             'password' => 'nullable|string|min:8|confirmed',
             'Usu_telefono' => 'nullable|string|max:15',
             'Usu_direccion' => 'nullable|string|max:255',
-            'Usu_foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'Usu_foto' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
-        $user->name = $data['name'];
-        $user->email = $data['email'];
+        // Update only provided fields
+        if (isset($data['name']) && !empty($data['name'])) {
+            $user->name = $data['name'];
+        }
+        if (isset($data['email']) && !empty($data['email'])) {
+            $user->email = $data['email'];
+        }
         if ($request->filled('password')) {
             $user->password = Hash::make($data['password']);
         }
-        $user->Usu_telefono = $data['Usu_telefono'];
-        $user->Usu_direccion = $data['Usu_direccion'];
+        if (isset($data['Usu_telefono'])) {
+            $user->Usu_telefono = $data['Usu_telefono'];
+        }
+        if (isset($data['Usu_direccion'])) {
+            $user->Usu_direccion = $data['Usu_direccion'];
+        }
 
         // Profile photo upload
         if ($request->hasFile('Usu_foto')) {

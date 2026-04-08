@@ -28,7 +28,10 @@
                     <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7em; font-weight: bold;">{{ $notifCount }}</span>
                 @endif
             </div>
-            <span style="font-weight: bold; margin-right: 10px;">{{ Auth::user()->name }}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="{{ Auth::user()->Usu_foto ? asset('img/profiles/' . Auth::user()->Usu_foto) : asset('img/usuario.png') }}" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                <span style="font-weight: bold;">{{ Auth::user()->name }}</span>
+            </div>
         </div>
     </header>
 
@@ -36,10 +39,10 @@
     <div id="notifSidebar" class="notif-sidebar">
         <button class="close-btn" onclick="toggleSidebar()">✖</button>
         <h3>Notificaciones</h3>
-        <div class="notif-list">
+        <div class="notif-list" id="notificationContainer">
             @auth
                 @forelse(\App\Models\Notification::where('Usu_documento', Auth::user()->Usu_documento)->latest()->take(8)->get() as $notification)
-                    <a href="{{ $notification->Noti_link ?? '#' }}">
+                    <a href="{{ $notification->Noti_link ?? '#' }}" data-notification-id="{{ $notification->Noto_id }}" class="notification-link">
                         {{ $notification->Noti_mensaje }}<br>
                         <small style="color: #999;">{{ \Carbon\Carbon::parse($notification->Noti_fecha)->diffForHumans() }}</small>
                     </a>
@@ -122,6 +125,54 @@
                 }
             }
         }
+
+        // Notification removal on click
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationLinks = document.querySelectorAll('.notification-link');
+            notificationLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const notificationId = this.getAttribute('data-notification-id');
+                    const href = this.getAttribute('href');
+                    const linkElement = this;
+                    
+                    // Delete from database
+                    fetch(`/notifications/${notificationId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => {
+                        if(response.ok) {
+                            // Remove from DOM with animation
+                            linkElement.style.opacity = '0';
+                            linkElement.style.transition = 'opacity 0.3s ease';
+                            setTimeout(() => {
+                                if (linkElement.parentElement) {
+                                    linkElement.remove();
+                                }
+                            }, 300);
+                            
+                            // Navigate to link if valid
+                            if (href && href !== '#') {
+                                setTimeout(() => {
+                                    window.location.href = href;
+                                }, 300);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al eliminar notificación:', error);
+                        // Still navigate even if delete fails
+                        if (href && href !== '#') {
+                            window.location.href = href;
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>

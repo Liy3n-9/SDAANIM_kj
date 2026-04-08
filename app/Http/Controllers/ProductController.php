@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
+    /**
+     * Valid categories for products.
+     *
+     * Keep this in sync with the database enum values.
+     */
+    protected array $productCategories = ['Alimentos', 'Juguetes', 'Camas', 'Accesorios', 'Ropa'];
+
     /**
      * Display products for the public.
      */
@@ -43,7 +51,7 @@ class ProductController extends Controller
             'prod_descripcion' => 'required|string',
             'prod_precio' => 'required|numeric|min:0',
             'prod_cantidad' => 'required|integer|min:0',
-            'prod_categoria' => 'required|string|max:50',
+            'prod_categoria' => ['required', 'string', Rule::in($this->productCategories)],
             'prod_imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -79,7 +87,7 @@ class ProductController extends Controller
             'prod_descripcion' => 'required|string',
             'prod_precio' => 'required|numeric|min:0',
             'prod_cantidad' => 'required|integer|min:0',
-            'prod_categoria' => 'required|string|max:50',
+            'prod_categoria' => ['required', 'string', Rule::in($this->productCategories)],
             'prod_imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 

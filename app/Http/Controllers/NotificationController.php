@@ -19,4 +19,18 @@ class NotificationController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    /**
+     * Eliminar una notificación específica del usuario.
+     */
+    public function destroy($notificationId)
+    {
+        $notification = Notification::where('Noto_id', $notificationId)
+            ->where('Usu_documento', Auth::user()->Usu_documento)
+            ->firstOrFail();
+
+        $notification->delete();
+
+        return response()->json(['success' => true]);
+    }
 }

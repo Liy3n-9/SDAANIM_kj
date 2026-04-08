@@ -38,8 +38,13 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
             <div>
                 <label style="display: block; font-weight: bold; margin-bottom: 8px;">Categoría</label>
-                <input type="text" name="prod_categoria" value="{{ old('prod_categoria') }}" placeholder="Ej: Comida, Juguetes" required 
-                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                <select name="prod_categoria" required 
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; background: white;">
+                    <option value="">Seleccione una categoría</option>
+                    @foreach(['Alimentos', 'Juguetes', 'Camas', 'Accesorios', 'Ropa'] as $category)
+                        <option value="{{ $category }}" {{ old('prod_categoria') === $category ? 'selected' : '' }}>{{ $category }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>

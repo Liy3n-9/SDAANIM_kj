@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\CartItem;
@@ -51,6 +52,13 @@ class OrderController extends Controller
 
         // Vaciar carrito
         CartItem::where('Usu_documento', Auth::user()->Usu_documento)->delete();
+
+        Notification::create([
+            'Usu_documento' => Auth::user()->Usu_documento,
+            'Noti_mensaje' => "Pedido #{$order->ord_id} creado. Puedes revisar tu historial de pedidos.",
+            'Noti_fecha' => now(),
+            'Noti_link' => route('orders.history'),
+        ]);
 
         return redirect()->route('orders.show', $order->ord_id)->with('success', 'Pedido creado exitosamente. Tienes 3 días para recogerlo.');
     }
