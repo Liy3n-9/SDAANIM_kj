@@ -16,10 +16,11 @@ use App\Http\Controllers\MedicalHistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\ReviewController;
 
 // --- GUEST / PUBLIC ROUTES ---
 Route::get('/', function () {
-    $animals = Animal::latest()->take(6)->get();
+    $animals = Animal::where('Anim_estado', '!=', 'Adoptado')->latest()->take(6)->get();
     return view('welcome', compact('animals'));
 })->name('welcome');
 
@@ -37,6 +38,10 @@ Route::get('/contacto', function () {
 Route::get('/voluntario', [InscriptionController::class, 'createVolunteer'])->name('inscriptions.volunteer');
 Route::get('/veterinario', [InscriptionController::class, 'createVeterinarian'])->name('inscriptions.veterinarian');
 Route::post('/inscripciones', [InscriptionController::class, 'store'])->name('inscriptions.store');
+
+Route::get('/redes-sociales', [ReviewController::class, 'publicIndex'])->name('social');
+Route::get('/modelo-negocio', function () { return view('public.business'); })->name('business');
+Route::get('/concientizacion', function () { return view('public.awareness'); })->name('awareness');
 
 // --- AUTHENTICATION ---
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -83,8 +88,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/mis-solicitudes', [AdoptionController::class, 'userRequests'])->name('requests');
         Route::get('/solicitar-adopcion/{animal_id}', [AdoptionController::class, 'create'])->name('adoption.create');
         Route::post('/solicitar-adopcion', [AdoptionController::class, 'store'])->name('adoption.store');
-        Route::get('/donar', [DonationController::class, 'create'])->name('donation.create');
-        Route::post('/donar', [DonationController::class, 'store'])->name('donation.store');
+        Route::post('/mis-solicitudes/{soli_id}/calificar', [ReviewController::class, 'store'])->name('review.store');
     });
 
     // CART ROUTES (all authenticated users)
@@ -164,6 +168,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/solicitudes/{id}/submit-report', [AdoptionController::class, 'submitReport'])->name('requests.submitReport');
         Route::post('/solicitudes/{id}/decide', [AdoptionController::class, 'decide'])->name('requests.decide');
         Route::get('/usuarios', [ProfileController::class, 'adminIndex'])->name('users.index');
+        Route::post('/usuarios/{document}/toggle', [ProfileController::class, 'adminToggleStatus'])->name('users.toggleStatus');
 
         // Admin Task management
         Route::get('/tareas', [TaskController::class, 'adminIndex'])->name('tasks.index');
