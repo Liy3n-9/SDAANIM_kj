@@ -35,11 +35,11 @@ class AnimalController extends Controller
     public function index()
     {
         $animals = Animal::where('Anim_estado', '!=', 'Adoptado')->latest('Anim_id')->get();
-        
+
         if (auth()->user()->role === 'Veterinario') {
             return view('home.vet_animals', compact('animals'));
         }
-        
+
         return view('admin.animals.index', compact('animals'));
     }
 
@@ -76,7 +76,7 @@ class AnimalController extends Controller
         ]);
 
         if ($request->hasFile('Anim_foto')) {
-            $imageName = time().'.'.$request->Anim_foto->extension();
+            $imageName = time() . '.' . $request->Anim_foto->extension();
             $request->Anim_foto->move(public_path('img'), $imageName);
             $data['Anim_foto'] = $imageName;
         }
@@ -101,7 +101,7 @@ class AnimalController extends Controller
     public function update(Request $request, $id)
     {
         $animal = Animal::findOrFail($id);
-        
+
         $data = $request->validate([
             'Anim_nombre' => 'required|string|max:100',
             'Anim_raza' => 'required|string|max:100',
@@ -113,7 +113,7 @@ class AnimalController extends Controller
         ]);
 
         if ($request->hasFile('Anim_foto')) {
-            $imageName = time().'.'.$request->Anim_foto->extension();
+            $imageName = time() . '.' . $request->Anim_foto->extension();
             $request->Anim_foto->move(public_path('img'), $imageName);
             $data['Anim_foto'] = $imageName;
         }
@@ -145,7 +145,7 @@ class AnimalController extends Controller
         }
 
         preg_match('/\d+/', $edadTexto, $matches);
-        $años = isset($matches[0]) ? (int)$matches[0] : 0;
+        $años = isset($matches[0]) ? (int) $matches[0] : 0;
 
         if ($años <= 2) {
             return 'cachorro';
@@ -159,11 +159,14 @@ class AnimalController extends Controller
     public function adopterDashboard()
     {
         $animals = Animal::where('Anim_estado', 'Disponible')
-                        ->latest('Anim_id')
-                        ->take(6)
-                        ->get();
+            ->latest('Anim_id')
+            ->take(6)
+            ->get();
 
-        return view('home.adopter', compact('animals'));
+        $aboutController = new AboutController();
+        $about = $aboutController->getAboutDataPublic();
+
+        return view('home.adopter', compact('animals', 'about'));
     }
 
     /**

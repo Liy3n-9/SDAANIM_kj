@@ -40,8 +40,10 @@ Route::get('/veterinario', [InscriptionController::class, 'createVeterinarian'])
 Route::post('/inscripciones', [InscriptionController::class, 'store'])->name('inscriptions.store');
 
 Route::get('/redes-sociales', [ReviewController::class, 'publicIndex'])->name('social');
-Route::get('/modelo-negocio', function () { return view('public.business'); })->name('business');
-Route::get('/concientizacion', function () { return view('public.awareness'); })->name('awareness');
+Route::get('/modelo-negocio', function () {
+    return view('public.business'); })->name('business');
+Route::get('/concientizacion', function () {
+    return view('public.awareness'); })->name('awareness');
 
 // --- AUTHENTICATION ---
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -89,6 +91,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/solicitar-adopcion/{animal_id}', [AdoptionController::class, 'create'])->name('adoption.create');
         Route::post('/solicitar-adopcion', [AdoptionController::class, 'store'])->name('adoption.store');
         Route::post('/mis-solicitudes/{soli_id}/calificar', [ReviewController::class, 'store'])->name('review.store');
+        Route::get('/historia', [AboutController::class, 'adopterEdit'])->name('history.edit');
+        Route::post('/historia', [AboutController::class, 'adopterUpdate'])->name('history.update');
     });
 
     // CART ROUTES (all authenticated users)
@@ -157,7 +161,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('dashboard');
         Route::resource('animals', AnimalController::class);
         Route::resource('products', ProductController::class);
-        
+
         // Orders management for admin
         Route::get('/pedidos', [OrderController::class, 'history'])->name('orders.history');
         Route::post('/pedidos/{ord_id}/recoger', [OrderController::class, 'markAsPickedUp'])->name('orders.mark-picked-up');
