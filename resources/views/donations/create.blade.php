@@ -33,7 +33,11 @@
 
         <section class="form-donar">
             <h3>Registra tu Donación</h3>
-
+            @if(session('success'))
+                <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <form action="{{ route('adopter.donation.store') }}" method="POST">
                 @csrf

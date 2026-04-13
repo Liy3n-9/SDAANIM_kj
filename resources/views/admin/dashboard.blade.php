@@ -46,14 +46,6 @@
         <a href="{{ route('admin.inscriptions.index') }}">Ver Inscripciones</a>
     </div>
 
-    {{-- Quiénes Somos --}}
-    <div class="admin-card">
-        <div class="icon">🏢</div>
-        <h3>Quiénes Somos</h3>
-        <p>Edita la historia, misión y visión para el panel de adoptantes.</p>
-        <a href="{{ route('admin.about.edit') }}">Editar Historia</a>
-    </div>
-
     {{-- Solicitudes --}}
     <div class="admin-card">
         <div class="icon">📋</div>

@@ -64,7 +64,7 @@
                 placeholder="Número de Documento"
                 value="{{ old('Usu_documento') }}"
                 required 
-                style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; margin-bottom: 0.85rem;" />
+                style="width: 100%; box-sizing: border-box; margin-bottom: 0.85rem;" />
             @error('Usu_documento') <p style="color:red; font-size:0.8rem; margin-top:-10px; margin-bottom:10px;">{{ $message }}</p> @enderror
 
             <input
@@ -73,7 +73,7 @@
                 placeholder="Nombre Completo"
                 value="{{ old('name') }}"
                 required 
-                style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; margin-bottom: 0.85rem;" />
+                style="width: 100%; box-sizing: border-box; margin-bottom: 0.85rem;" />
             @error('name') <p style="color:red; font-size:0.8rem; margin-top:-10px; margin-bottom:10px;">{{ $message }}</p> @enderror
 
             <input
@@ -82,7 +82,7 @@
                 placeholder="Correo Electrónico"
                 value="{{ old('email') }}"
                 required 
-                style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; margin-bottom: 0.85rem;" />
+                style="width: 100%; box-sizing: border-box; margin-bottom: 0.85rem;" />
             @error('email') <p style="color:red; font-size:0.8rem; margin-top:-10px; margin-bottom:10px;">{{ $message }}</p> @enderror
 
             <input
@@ -91,7 +91,7 @@
                 placeholder="Número de Teléfono"
                 value="{{ old('Usu_telefono') }}"
                 required 
-                style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; margin-bottom: 0.85rem;" />
+                style="width: 100%; box-sizing: border-box; margin-bottom: 0.85rem;" />
             @error('Usu_telefono') <p style="color:red; font-size:0.8rem; margin-top:-10px; margin-bottom:10px;">{{ $message }}</p> @enderror
 
             <input
@@ -100,7 +100,7 @@
                 placeholder="Dirección"
                 value="{{ old('Usu_direccion') }}"
                 required 
-                style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; margin-bottom: 0.85rem;" />
+                style="width: 100%; box-sizing: border-box; margin-bottom: 0.85rem;" />
             @error('Usu_direccion') <p style="color:red; font-size:0.8rem; margin-top:-10px; margin-bottom:10px;">{{ $message }}</p> @enderror
 
             <div style="position: relative; width: 100%; margin-bottom: 0.85rem;">
@@ -110,7 +110,7 @@
                     id="register-password"
                     placeholder="Contraseña"
                     required
-                    style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; padding-right: 42px;"
+                    style="width: 100%; padding-right: 42px;"
                 />
                 <button type="button" onclick="togglePasswordVisibility('register-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent; cursor: pointer; font-size: 1.1rem;">👁️</button>
             </div>
@@ -123,7 +123,7 @@
                     id="register-password_confirmation"
                     placeholder="Confirmar Contraseña"
                     required
-                    style="width: 100%; box-sizing: border-box; height: 44px; padding: 10px; padding-right: 42px;"
+                    style="width: 100%; padding-right: 42px;"
                 />
                 <button type="button" onclick="togglePasswordVisibility('register-password_confirmation', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent; cursor: pointer; font-size: 1.1rem;">👁️</button>
             </div>

@@ -4,9 +4,10 @@
 
 @section('content')
 
-<div style="max-width: 900px; margin: 40px auto; padding: 20px;">
-    <div class="premium-card" style="padding: 40px;">
-        <h2 style="color: #2e8b57; margin-bottom: 30px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px;">🛍️ Agregar Nuevo Producto</h2>
+<div style="max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <a href="{{ route('admin.products.index') }}" style="display: inline-block; margin-bottom: 20px; background: #f1f5f9; color: #475569; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">← Volver</a>
+
+    <h2 style="color: #2e8b57; margin-bottom: 30px;">Agregar Nuevo Producto</h2>
 
     @if($errors->any())
         <div style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
@@ -65,9 +66,13 @@
                 style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
         </div>
 
-        <div style="margin-top: 40px; display: flex; gap: 15px; border-top: 1px solid #f1f5f9; padding-top: 25px;">
-            <button type="submit" class="premium-btn premium-btn-primary" style="padding: 14px 40px; font-size: 1.1em; border-radius: 12px; justify-content: center;">Guardar Producto</button>
-            <a href="{{ route('admin.products.index') }}" class="premium-btn" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 14px 40px; font-size: 1.1em; border-radius: 12px; display: flex; align-items: center; justify-content: center;">Cancelar</a>
+        <div style="display: flex; gap: 15px;">
+            <button type="submit" style="background: #2e8b57; color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em;">
+                Guardar Producto
+            </button>
+            <a href="{{ route('admin.products.index') }}" style="padding: 12px 30px; background: #e2e8f0; color: #475569; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center;">
+                Cancelar
+            </a>
         </div>
     </form>
 </div>

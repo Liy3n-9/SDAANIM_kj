@@ -9,7 +9,11 @@
 
     <h1 style="color: #2d7d46; margin-bottom: 30px;">Pedido #{{ $order->ord_id }}</h1>
 
-
+    @if(session('success'))
+        <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
         <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">

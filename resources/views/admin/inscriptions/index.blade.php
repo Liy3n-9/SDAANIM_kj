@@ -8,7 +8,11 @@
     <h2>Solicitudes de Voluntarios y Veterinarios</h2>
     <p>Revisa los perfiles de los nuevos interesados en unirse a la fundación.</p>
 
-
+    @if(session('success'))
+        <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
         <thead style="background: #2e8b57; color: white;">
