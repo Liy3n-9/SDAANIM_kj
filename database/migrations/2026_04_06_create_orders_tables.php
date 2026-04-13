@@ -11,7 +11,7 @@ return new class extends Migration
         if (!Schema::hasTable('orders')) {
             Schema::create('orders', function (Blueprint $table) {
                 $table->id('ord_id');
-                $table->string('Usu_documento');
+                $table->unsignedBigInteger('Usu_documento');
                 $table->enum('ord_estado', ['pendiente', 'confirmado', 'recogido', 'cancelado'])->default('pendiente');
                 $table->dateTime('ord_fechaCreacion');
                 $table->dateTime('ord_fechaExpiracion')->nullable();
@@ -41,7 +41,7 @@ return new class extends Migration
         if (!Schema::hasTable('cart_items')) {
             Schema::create('cart_items', function (Blueprint $table) {
                 $table->id('cart_id');
-                $table->string('Usu_documento');
+                $table->unsignedBigInteger('Usu_documento');
                 $table->unsignedBigInteger('prod_id');
                 $table->integer('cart_cantidad');
                 $table->timestamps();

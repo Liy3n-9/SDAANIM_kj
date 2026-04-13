@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->unsignedBigInteger('Soli_id')->nullable();
-            $table->foreign('Soli_id')->references('Soli_id')->on('adoption_requests')->onDelete('cascade');
+            if (!Schema::hasColumn('tasks', 'Soli_id')) {
+                $table->unsignedBigInteger('Soli_id')->nullable()->after('Usu_documento');
+                
+                // Si deseas agregar FK:
+                // $table->foreign('Soli_id')->references('Soli_id')->on('adoption_requests')->onDelete('cascade');
+            }
         });
     }
 

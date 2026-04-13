@@ -11,7 +11,7 @@ return new class extends Migration
         if (!Schema::hasTable('cart_items')) {
             Schema::create('cart_items', function (Blueprint $table) {
                 $table->id('cart_id');
-                $table->string('Usu_documento');
+                $table->unsignedBigInteger('Usu_documento');
                 $table->unsignedBigInteger('prod_id');
                 $table->integer('cart_cantidad');
                 $table->timestamps();
