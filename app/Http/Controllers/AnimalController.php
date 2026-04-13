@@ -34,7 +34,7 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        $animals = Animal::latest('Anim_id')->get();
+        $animals = Animal::where('Anim_estado', '!=', 'Adoptado')->latest('Anim_id')->get();
         
         if (auth()->user()->role === 'Veterinario') {
             return view('home.vet_animals', compact('animals'));
