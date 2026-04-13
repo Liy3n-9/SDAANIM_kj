@@ -52,10 +52,6 @@
             @endauth
         </div>
         
-        <div style="margin-top: 20px;">
-            <a href="{{ route('admin.activities') }}" style="display: block; background: #f59e0b; color: white; padding: 12px; text-align: center; font-weight: bold; border-radius: 8px; text-decoration: none; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">📊 Ver Actividades Asignadas</a>
-        </div>
-
         <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
         
         <h3 style="font-size: 1.1em;">Menú Admin</h3>
