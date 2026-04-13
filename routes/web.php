@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\AboutController;
 
 // --- GUEST / PUBLIC ROUTES ---
 Route::get('/', function () {
@@ -24,9 +25,7 @@ Route::get('/', function () {
     return view('welcome', compact('animals'));
 })->name('welcome');
 
-Route::get('/quienes-somos', function () {
-    return view('public.about');
-})->name('about');
+Route::get('/quienes-somos', [AboutController::class, 'show'])->name('about');
 Route::get('/adopta', [AnimalController::class, 'publicIndex'])->name('adopta');
 Route::get('/animal/{id}', [AnimalController::class, 'show'])->name('animal.show');
 Route::get('/api/animal/{id}/medical-history', [AnimalController::class, 'getMedicalHistory'])->name('animal.medical-history');
@@ -183,6 +182,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Donaciones admin view
         Route::get('/donaciones', [DonationController::class, 'adminIndex'])->name('donations.index');
+
+        // Quiénes somos admin edit
+        Route::get('/about', [AboutController::class, 'edit'])->name('about.edit');
+        Route::post('/about', [AboutController::class, 'update'])->name('about.update');
     });
 
     // ADMIN: Task expiration (should run as scheduled command)

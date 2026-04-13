@@ -151,11 +151,15 @@ body {
 
         .admin-card {
             background: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
             border-top: 4px solid #2e8b57;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
         }
 
         .admin-card:hover {
@@ -175,20 +179,24 @@ body {
         }
 
         .admin-card p {
-            margin-bottom: 22px;
+            margin-bottom: 25px;
             color: #56655e;
             line-height: 1.7;
+            flex-grow: 1; /* Pushes the button to the bottom */
         }
 
         .admin-card a {
             display: inline-block;
             background: linear-gradient(90deg, #2e8b57, #4caf50);
             color: white;
-            padding: 12px 22px;
-            border-radius: 999px;
+            padding: 14px 25px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: bold;
+            text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: auto;
+            width: fit-content;
         }
 
         .admin-card a:hover {
