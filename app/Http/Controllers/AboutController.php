@@ -78,4 +78,9 @@ class AboutController extends Controller
             'vision' => 'Para el año 2040 seremos una plataforma líder en adopción responsable de animales en Colombia, reconocida por su innovación tecnológica y su impacto social, expandiendo nuestra solución a múltiples refugios y convirtiéndonos en un referente en la protección animal y el bienestar comunitario.',
         ];
     }
+
+    public function getAboutDataPublic()
+    {
+        return $this->getAboutData();
+    }
 }
